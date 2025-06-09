@@ -1,6 +1,7 @@
 
 import React from 'react';
 import EmotionWheel from './EmotionWheel';
+import EmotionWheelFullscreen from './EmotionWheelFullscreen';
 
 interface FeaturesSectionProps {
   language: string;
@@ -24,6 +25,11 @@ const FeaturesSection: React.FC<FeaturesSectionProps> = ({ language }) => {
 
         <div className="max-w-4xl mx-auto">
           <EmotionWheel language={language} />
+          
+          {/* Fullscreen Button */}
+          <div className="flex justify-center">
+            <EmotionWheelFullscreen language={language} />
+          </div>
         </div>
 
         {/* Legend */}
