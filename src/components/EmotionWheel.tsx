@@ -11,7 +11,11 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({ language }) => {
   const [hoveredEmotion, setHoveredEmotion] = useState<string | null>(null);
 
   const getEmotionText = (emotionId: string, type: 'primary' | 'secondary' | 'tertiary') => {
-    return translations[language]?.[emotionId]?.[type] || emotionsData.find(e => e.id === emotionId)?.[type] || '';
+    const emotionData = translations[language]?.[emotionId] || emotionsData.find(e => e.id === emotionId);
+    if (!emotionData) return type === 'primary' ? '' : [];
+    
+    const value = emotionData[type];
+    return type === 'primary' ? (typeof value === 'string' ? value : value[0] || '') : (Array.isArray(value) ? value : []);
   };
 
   const createEmotionSegment = (emotion: any, radius: number, strokeWidth: number, type: 'primary' | 'secondary' | 'tertiary') => {
@@ -88,14 +92,14 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({ language }) => {
     <div className="flex flex-col items-center space-y-8">
       <div className="relative">
         <svg width="400" height="400" viewBox="0 0 400 400" className="w-full max-w-lg">
-          {/* Outer ring - Primary emotions */}
-          {emotionsData.map(emotion => createEmotionSegment(emotion, 180, 60, 'primary'))}
+          {/* Inner ring - Primary emotions */}
+          {emotionsData.map(emotion => createEmotionSegment(emotion, 80, 40, 'primary'))}
           
           {/* Middle ring - Secondary emotions */}
           {emotionsData.map(emotion => createEmotionSegment(emotion, 120, 40, 'secondary'))}
           
-          {/* Inner ring - Tertiary emotions */}
-          {emotionsData.map(emotion => createEmotionSegment(emotion, 80, 40, 'tertiary'))}
+          {/* Outer ring - Related emotions (tertiary) */}
+          {emotionsData.map(emotion => createEmotionSegment(emotion, 180, 60, 'tertiary'))}
           
           {/* Center circle */}
           <circle
@@ -142,7 +146,7 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({ language }) => {
                 {language === 'en' ? 'Secondary Emotions:' : 'ద్వితీయ భావనలు:'}
               </h4>
               <p className="text-sm">
-                {getEmotionText(selectedEmotion, 'secondary').join(', ')}
+                {(getEmotionText(selectedEmotion, 'secondary') as string[]).join(', ')}
               </p>
             </div>
             
@@ -151,7 +155,7 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({ language }) => {
                 {language === 'en' ? 'Related Emotions:' : 'సంబంధిత భావనలు:'}
               </h4>
               <p className="text-sm">
-                {getEmotionText(selectedEmotion, 'tertiary').join(', ')}
+                {(getEmotionText(selectedEmotion, 'tertiary') as string[]).join(', ')}
               </p>
             </div>
           </div>

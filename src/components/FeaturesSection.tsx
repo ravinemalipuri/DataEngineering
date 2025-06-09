@@ -39,7 +39,7 @@ const FeaturesSection: React.FC<FeaturesSectionProps> = ({ language }) => {
                 {language === 'en' ? 'Primary Emotions' : 'ప్రాథమిక భావోద్వేగాలు'}
               </h4>
               <p className="text-sm text-muted-foreground">
-                {language === 'en' ? 'Core emotions - outer ring' : 'ప్రధాన భావోద్వేగాలు - బాహ్య వలయం'}
+                {language === 'en' ? 'Core emotions - inner ring' : 'ప్రధాన భావోద్వేగాలు - అంతర్గత వలయం'}
               </p>
             </div>
             
@@ -59,7 +59,7 @@ const FeaturesSection: React.FC<FeaturesSectionProps> = ({ language }) => {
                 {language === 'en' ? 'Related Emotions' : 'సంబంధిత భావోద్వేగాలు'}
               </h4>
               <p className="text-sm text-muted-foreground">
-                {language === 'en' ? 'Connected feelings - inner ring' : 'అనుసంధానించబడిన భావాలు - అంతర్గత వలయం'}
+                {language === 'en' ? 'Connected feelings - outer ring' : 'అనుసంధానించబడిన భావాలు - బాహ్య వలయం'}
               </p>
             </div>
           </div>
