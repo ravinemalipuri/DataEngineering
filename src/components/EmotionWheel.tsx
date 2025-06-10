@@ -11,8 +11,8 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({ language }) => {
   const [hoveredEmotion, setHoveredEmotion] = useState<string | null>(null);
 
   const createLevel1Segment = (emotion: EmotionLevel1, index: number, total: number) => {
-    const centerX = 250;
-    const centerY = 250;
+    const centerX = 350;
+    const centerY = 350;
     const numPrimary = total;
     const segmentAngle = 360 / numPrimary;
     const startAngle = index * segmentAngle;
@@ -21,8 +21,8 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({ language }) => {
     const startAngleRad = (startAngle * Math.PI) / 180;
     const endAngleRad = (endAngle * Math.PI) / 180;
     
-    const innerRadius = 50;
-    const outerRadius = 100;
+    const innerRadius = 70;
+    const outerRadius = 140;
     
     const x1 = centerX + innerRadius * Math.cos(startAngleRad);
     const y1 = centerY + innerRadius * Math.sin(startAngleRad);
@@ -78,11 +78,11 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({ language }) => {
           textAnchor="middle"
           dominantBaseline="middle"
           fill="black"
-          fontSize="12"
+          fontSize="14"
           fontWeight="700"
           className="pointer-events-none font-inter"
           style={{ 
-            textShadow: '0px 0px 3px rgba(255,255,255,0.9), 0px 0px 3px rgba(255,255,255,0.9)' 
+            textShadow: '1px 1px 2px rgba(255,255,255,0.9), -1px -1px 2px rgba(255,255,255,0.9), 1px -1px 2px rgba(255,255,255,0.9), -1px 1px 2px rgba(255,255,255,0.9)' 
           }}
           transform={`rotate(${textRotation} ${textX} ${textY})`}
         >
@@ -93,8 +93,8 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({ language }) => {
   };
 
   const createLevel2Segments = (primaryEmotion: EmotionLevel1, primaryIndex: number, totalPrimary: number) => {
-    const centerX = 250;
-    const centerY = 250;
+    const centerX = 350;
+    const centerY = 350;
     const primarySegmentAngle = 360 / totalPrimary;
     const primaryStartAngle = primaryIndex * primarySegmentAngle;
     
@@ -109,8 +109,8 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({ language }) => {
       const startAngleRad = (startAngle * Math.PI) / 180;
       const endAngleRad = (endAngle * Math.PI) / 180;
       
-      const innerRadius = 100;
-      const outerRadius = 150;
+      const innerRadius = 140;
+      const outerRadius = 210;
       
       const x1 = centerX + innerRadius * Math.cos(startAngleRad);
       const y1 = centerY + innerRadius * Math.sin(startAngleRad);
@@ -160,11 +160,11 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({ language }) => {
             textAnchor="middle"
             dominantBaseline="middle"
             fill="black"
-            fontSize="9"
+            fontSize="11"
             fontWeight="600"
             className="pointer-events-none font-inter"
             style={{ 
-              textShadow: '0px 0px 2px rgba(255,255,255,0.9), 0px 0px 2px rgba(255,255,255,0.9)' 
+              textShadow: '1px 1px 2px rgba(255,255,255,0.9), -1px -1px 2px rgba(255,255,255,0.9), 1px -1px 2px rgba(255,255,255,0.9), -1px 1px 2px rgba(255,255,255,0.9)' 
             }}
             transform={`rotate(${textRotation} ${textX} ${textY})`}
           >
@@ -176,8 +176,8 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({ language }) => {
   };
 
   const createLevel3Segments = (primaryEmotion: EmotionLevel1, primaryIndex: number, totalPrimary: number) => {
-    const centerX = 250;
-    const centerY = 250;
+    const centerX = 350;
+    const centerY = 350;
     const primarySegmentAngle = 360 / totalPrimary;
     const primaryStartAngle = primaryIndex * primarySegmentAngle;
     
@@ -200,8 +200,8 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({ language }) => {
         const startAngleRad = (startAngle * Math.PI) / 180;
         const endAngleRad = (endAngle * Math.PI) / 180;
         
-        const innerRadius = 150;
-        const outerRadius = 200;
+        const innerRadius = 210;
+        const outerRadius = 280;
         
         const x1 = centerX + innerRadius * Math.cos(startAngleRad);
         const y1 = centerY + innerRadius * Math.sin(startAngleRad);
@@ -251,11 +251,11 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({ language }) => {
               textAnchor="middle"
               dominantBaseline="middle"
               fill="black"
-              fontSize="7"
+              fontSize="9"
               fontWeight="500"
               className="pointer-events-none font-inter"
               style={{ 
-                textShadow: '0px 0px 2px rgba(255,255,255,0.9), 0px 0px 2px rgba(255,255,255,0.9)' 
+                textShadow: '1px 1px 2px rgba(255,255,255,0.9), -1px -1px 2px rgba(255,255,255,0.9), 1px -1px 2px rgba(255,255,255,0.9), -1px 1px 2px rgba(255,255,255,0.9)' 
               }}
               transform={`rotate(${textRotation} ${textX} ${textY})`}
             >
@@ -272,7 +272,7 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({ language }) => {
   return (
     <div className="flex flex-col items-center space-y-8">
       <div className="relative">
-        <svg width="500" height="500" viewBox="0 0 500 500" className="w-full max-w-2xl">
+        <svg width="700" height="700" viewBox="0 0 700 700" className="w-full max-w-4xl">
           {/* Level 3 segments (outermost) */}
           {emotionsData.map((emotion, index) => createLevel3Segments(emotion, index, emotionsData.length))}
           
@@ -284,9 +284,9 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({ language }) => {
           
           {/* Center circle */}
           <circle
-            cx="250"
-            cy="250"
-            r="50"
+            cx="350"
+            cy="350"
+            r="70"
             fill="url(#centerGradient)"
             stroke="white"
             strokeWidth="3"
@@ -300,12 +300,12 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({ language }) => {
           </defs>
           
           <text
-            x="250"
-            y="250"
+            x="350"
+            y="350"
             textAnchor="middle"
             dominantBaseline="middle"
             fill="#333"
-            fontSize="16"
+            fontSize="18"
             fontWeight="700"
             className="font-playfair"
           >
