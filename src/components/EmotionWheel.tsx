@@ -10,13 +10,13 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({ language }) => {
   const [selectedEmotion, setSelectedEmotion] = useState<EmotionLevel1 | null>(null);
   const [hoveredEmotion, setHoveredEmotion] = useState<string | null>(null);
 
-  const createLevel1Segment = (emotion: EmotionLevel1) => {
+  const createLevel1Segment = (emotion: EmotionLevel1, index: number, total: number) => {
     const centerX = 250;
     const centerY = 250;
-    const numPrimary = emotionsData.length;
+    const numPrimary = total;
     const segmentAngle = 360 / numPrimary;
-    const startAngle = emotion.angle - segmentAngle / 2;
-    const endAngle = emotion.angle + segmentAngle / 2;
+    const startAngle = index * segmentAngle;
+    const endAngle = (index + 1) * segmentAngle;
     
     const startAngleRad = (startAngle * Math.PI) / 180;
     const endAngleRad = (endAngle * Math.PI) / 180;
@@ -49,7 +49,7 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({ language }) => {
     const isSelected = selectedEmotion?.id === emotion.id;
     
     const textRadius = (innerRadius + outerRadius) / 2;
-    const textAngle = emotion.angle;
+    const textAngle = startAngle + (segmentAngle / 2);
     const textAngleRad = (textAngle * Math.PI) / 180;
     const textX = centerX + textRadius * Math.cos(textAngleRad);
     const textY = centerY + textRadius * Math.sin(textAngleRad);
@@ -77,11 +77,13 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({ language }) => {
           y={textY}
           textAnchor="middle"
           dominantBaseline="middle"
-          fill="white"
+          fill="black"
           fontSize="12"
           fontWeight="700"
           className="pointer-events-none font-inter"
-          style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.8)' }}
+          style={{ 
+            textShadow: '0px 0px 3px rgba(255,255,255,0.9), 0px 0px 3px rgba(255,255,255,0.9)' 
+          }}
           transform={`rotate(${textRotation} ${textX} ${textY})`}
         >
           {getEmotionName(emotion, language as 'en' | 'te')}
@@ -90,12 +92,11 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({ language }) => {
     );
   };
 
-  const createLevel2Segments = (primaryEmotion: EmotionLevel1) => {
+  const createLevel2Segments = (primaryEmotion: EmotionLevel1, primaryIndex: number, totalPrimary: number) => {
     const centerX = 250;
     const centerY = 250;
-    const numPrimary = emotionsData.length;
-    const primarySegmentAngle = 360 / numPrimary;
-    const primaryStartAngle = primaryEmotion.angle - primarySegmentAngle / 2;
+    const primarySegmentAngle = 360 / totalPrimary;
+    const primaryStartAngle = primaryIndex * primarySegmentAngle;
     
     const level2Emotions = primaryEmotion.level2Emotions;
     const numLevel2 = level2Emotions.length;
@@ -158,11 +159,13 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({ language }) => {
             y={textY}
             textAnchor="middle"
             dominantBaseline="middle"
-            fill="white"
+            fill="black"
             fontSize="9"
             fontWeight="600"
             className="pointer-events-none font-inter"
-            style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.8)' }}
+            style={{ 
+              textShadow: '0px 0px 2px rgba(255,255,255,0.9), 0px 0px 2px rgba(255,255,255,0.9)' 
+            }}
             transform={`rotate(${textRotation} ${textX} ${textY})`}
           >
             {getEmotionName(emotion, language as 'en' | 'te')}
@@ -172,12 +175,11 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({ language }) => {
     });
   };
 
-  const createLevel3Segments = (primaryEmotion: EmotionLevel1) => {
+  const createLevel3Segments = (primaryEmotion: EmotionLevel1, primaryIndex: number, totalPrimary: number) => {
     const centerX = 250;
     const centerY = 250;
-    const numPrimary = emotionsData.length;
-    const primarySegmentAngle = 360 / numPrimary;
-    const primaryStartAngle = primaryEmotion.angle - primarySegmentAngle / 2;
+    const primarySegmentAngle = 360 / totalPrimary;
+    const primaryStartAngle = primaryIndex * primarySegmentAngle;
     
     const level2Emotions = primaryEmotion.level2Emotions;
     const numLevel2 = level2Emotions.length;
@@ -248,11 +250,13 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({ language }) => {
               y={textY}
               textAnchor="middle"
               dominantBaseline="middle"
-              fill="white"
+              fill="black"
               fontSize="7"
               fontWeight="500"
               className="pointer-events-none font-inter"
-              style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.8)' }}
+              style={{ 
+                textShadow: '0px 0px 2px rgba(255,255,255,0.9), 0px 0px 2px rgba(255,255,255,0.9)' 
+              }}
               transform={`rotate(${textRotation} ${textX} ${textY})`}
             >
               {getEmotionName(emotion, language as 'en' | 'te')}
@@ -270,13 +274,13 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({ language }) => {
       <div className="relative">
         <svg width="500" height="500" viewBox="0 0 500 500" className="w-full max-w-2xl">
           {/* Level 3 segments (outermost) */}
-          {emotionsData.map(emotion => createLevel3Segments(emotion))}
+          {emotionsData.map((emotion, index) => createLevel3Segments(emotion, index, emotionsData.length))}
           
           {/* Level 2 segments (middle) */}
-          {emotionsData.map(emotion => createLevel2Segments(emotion))}
+          {emotionsData.map((emotion, index) => createLevel2Segments(emotion, index, emotionsData.length))}
           
           {/* Level 1 segments (innermost) */}
-          {emotionsData.map(emotion => createLevel1Segment(emotion))}
+          {emotionsData.map((emotion, index) => createLevel1Segment(emotion, index, emotionsData.length))}
           
           {/* Center circle */}
           <circle
