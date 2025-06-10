@@ -32,7 +32,7 @@ const FeaturesSection: React.FC<FeaturesSectionProps> = ({ language }) => {
           </div>
         </div>
 
-        {/* Legend */}
+        {/* Understanding the Wheel */}
         <div className="mt-16 bg-card rounded-xl p-8 border border-border">
           <h3 className="text-xl font-playfair font-semibold mb-6 text-center">
             {language === 'en' ? 'Understanding the Wheel' : 'చక్రాన్ని అర్థం చేసుకోవడం'}
@@ -40,7 +40,7 @@ const FeaturesSection: React.FC<FeaturesSectionProps> = ({ language }) => {
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="text-center">
-              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-emotion-joy to-emotion-anticipation mx-auto mb-3 opacity-100"></div>
+              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#FFD700] to-[#DC143C] mx-auto mb-3 opacity-100"></div>
               <h4 className="font-semibold mb-2">
                 {language === 'en' ? 'Primary Emotions' : 'ప్రాథమిక భావోద్వేగాలు'}
               </h4>
@@ -50,22 +50,22 @@ const FeaturesSection: React.FC<FeaturesSectionProps> = ({ language }) => {
             </div>
             
             <div className="text-center">
-              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-emotion-trust to-emotion-fear mx-auto mb-3 opacity-70"></div>
+              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#4682B4] to-[#9370DB] mx-auto mb-3 opacity-70"></div>
               <h4 className="font-semibold mb-2">
                 {language === 'en' ? 'Secondary Emotions' : 'ద్వితీయ భావోద్వేగాలు'}
               </h4>
               <p className="text-sm text-muted-foreground">
-                {language === 'en' ? 'Variations in intensity - middle ring' : 'తీవ్రతలో వైవిధ్యాలు - మధ్య వలయం'}
+                {language === 'en' ? 'Emotion categories - middle ring' : 'భావోద్వేగ వర్గాలు - మధ్య వలయం'}
               </p>
             </div>
             
             <div className="text-center">
-              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-emotion-sadness to-emotion-disgust mx-auto mb-3 opacity-40"></div>
+              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#9ACD32] to-[#FF6347] mx-auto mb-3 opacity-40"></div>
               <h4 className="font-semibold mb-2">
-                {language === 'en' ? 'Related Emotions' : 'సంబంధిత భావోద్వేగాలు'}
+                {language === 'en' ? 'Detailed Emotions' : 'వివరణాత్మక భావోద్వేగాలు'}
               </h4>
               <p className="text-sm text-muted-foreground">
-                {language === 'en' ? 'Connected feelings - outer ring' : 'అనుసంధానించబడిన భావాలు - బాహ్య వలయం'}
+                {language === 'en' ? 'Specific feelings - outer ring' : 'నిర్దిష్ట భావాలు - బాహ్య వలయం'}
               </p>
             </div>
           </div>

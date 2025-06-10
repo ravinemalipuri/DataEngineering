@@ -1,27 +1,18 @@
-
 import React, { useState } from 'react';
-import { emotionsData, translations } from '@/data/emotions';
+import { emotionsData, getEmotionName, getAllLevel2Emotions, getAllLevel3Emotions, EmotionLevel1, EmotionLevel2 } from '@/data/emotions';
 
 interface EmotionWheelProps {
   language: string;
 }
 
 const EmotionWheel: React.FC<EmotionWheelProps> = ({ language }) => {
-  const [selectedEmotion, setSelectedEmotion] = useState<string | null>(null);
+  const [selectedEmotion, setSelectedEmotion] = useState<EmotionLevel1 | null>(null);
   const [hoveredEmotion, setHoveredEmotion] = useState<string | null>(null);
 
-  const getEmotionText = (emotionId: string, type: 'primary' | 'secondary' | 'tertiary') => {
-    const emotionData = translations[language]?.[emotionId] || emotionsData.find(e => e.id === emotionId);
-    if (!emotionData) return type === 'primary' ? '' : [];
-    
-    const value = emotionData[type];
-    return type === 'primary' ? (typeof value === 'string' ? value : value[0] || '') : (Array.isArray(value) ? value : []);
-  };
-
-  const createEmotionSegment = (emotion: any, radius: number, strokeWidth: number, type: 'primary' | 'secondary' | 'tertiary') => {
+  const createEmotionSegment = (emotion: EmotionLevel1, radius: number, strokeWidth: number, intensity: number) => {
     const centerX = 200;
     const centerY = 200;
-    const segmentAngle = 45; // 360 / 8 emotions
+    const segmentAngle = 360 / emotionsData.length;
     const startAngle = emotion.angle - segmentAngle / 2;
     const endAngle = emotion.angle + segmentAngle / 2;
     
@@ -52,12 +43,24 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({ language }) => {
       'Z'
     ].join(' ');
 
-    const intensity = type === 'primary' ? 1 : type === 'secondary' ? 0.7 : 0.4;
     const isHovered = hoveredEmotion === emotion.id;
-    const isSelected = selectedEmotion === emotion.id;
+    const isSelected = selectedEmotion?.id === emotion.id;
+    
+    // Calculate text position and rotation for radial alignment
+    const textRadius = radius - strokeWidth / 2;
+    const textAngle = emotion.angle;
+    const textAngleRad = (textAngle * Math.PI) / 180;
+    const textX = centerX + textRadius * Math.cos(textAngleRad);
+    const textY = centerY + textRadius * Math.sin(textAngleRad);
+    
+    // Determine text rotation - keep text readable by avoiding upside-down text
+    let textRotation = textAngle;
+    if (textAngle > 90 && textAngle < 270) {
+      textRotation = textAngle + 180;
+    }
     
     return (
-      <g key={`${emotion.id}-${type}`}>
+      <g key={`${emotion.id}-${intensity}`}>
         <path
           d={pathData}
           fill={emotion.color}
@@ -67,21 +70,22 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({ language }) => {
           className={`transition-all duration-300 cursor-pointer ${isSelected ? 'drop-shadow-lg' : ''}`}
           onMouseEnter={() => setHoveredEmotion(emotion.id)}
           onMouseLeave={() => setHoveredEmotion(null)}
-          onClick={() => setSelectedEmotion(selectedEmotion === emotion.id ? null : emotion.id)}
+          onClick={() => setSelectedEmotion(selectedEmotion?.id === emotion.id ? null : emotion)}
         />
-        {type === 'primary' && (
+        {intensity === 1 && (
           <text
-            x={centerX + (radius - strokeWidth / 2) * Math.cos((emotion.angle * Math.PI) / 180)}
-            y={centerY + (radius - strokeWidth / 2) * Math.sin((emotion.angle * Math.PI) / 180)}
+            x={textX}
+            y={textY}
             textAnchor="middle"
             dominantBaseline="middle"
             fill="white"
-            fontSize="12"
-            fontWeight="600"
+            fontSize="11"
+            fontWeight="700"
             className="pointer-events-none font-inter"
-            style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.7)' }}
+            style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.8)' }}
+            transform={`rotate(${textRotation} ${textX} ${textY})`}
           >
-            {getEmotionText(emotion.id, 'primary')}
+            {getEmotionName(emotion, language as 'en' | 'te')}
           </text>
         )}
       </g>
@@ -92,14 +96,14 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({ language }) => {
     <div className="flex flex-col items-center space-y-8">
       <div className="relative">
         <svg width="400" height="400" viewBox="0 0 400 400" className="w-full max-w-lg">
+          {/* Outer ring - Level 3 emotions */}
+          {emotionsData.map(emotion => createEmotionSegment(emotion, 180, 60, 0.4))}
+          
+          {/* Middle ring - Level 2 emotions */}
+          {emotionsData.map(emotion => createEmotionSegment(emotion, 120, 40, 0.7))}
+          
           {/* Inner ring - Primary emotions */}
-          {emotionsData.map(emotion => createEmotionSegment(emotion, 80, 40, 'primary'))}
-          
-          {/* Middle ring - Secondary emotions */}
-          {emotionsData.map(emotion => createEmotionSegment(emotion, 120, 40, 'secondary'))}
-          
-          {/* Outer ring - Related emotions (tertiary) */}
-          {emotionsData.map(emotion => createEmotionSegment(emotion, 180, 60, 'tertiary'))}
+          {emotionsData.map(emotion => createEmotionSegment(emotion, 80, 40, 1))}
           
           {/* Center circle */}
           <circle
@@ -137,26 +141,34 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({ language }) => {
       {selectedEmotion && (
         <div className="bg-card border border-border rounded-lg p-6 w-full max-w-md mx-auto animate-fade-in">
           <h3 className="text-xl font-playfair font-semibold mb-4 text-center">
-            {getEmotionText(selectedEmotion, 'primary')}
+            {getEmotionName(selectedEmotion, language as 'en' | 'te')}
           </h3>
           
           <div className="space-y-3">
             <div>
-              <h4 className="font-semibold text-sm text-muted-foreground mb-1">
+              <h4 className="font-semibold text-sm text-muted-foreground mb-2">
                 {language === 'en' ? 'Secondary Emotions:' : 'ద్వితీయ భావనలు:'}
               </h4>
-              <p className="text-sm">
-                {(getEmotionText(selectedEmotion, 'secondary') as string[]).join(', ')}
-              </p>
+              <div className="grid grid-cols-2 gap-1 text-sm">
+                {getAllLevel2Emotions(selectedEmotion).map((emotion) => (
+                  <span key={emotion.id} className="text-xs bg-accent/20 rounded px-2 py-1">
+                    {getEmotionName(emotion, language as 'en' | 'te')}
+                  </span>
+                ))}
+              </div>
             </div>
             
             <div>
-              <h4 className="font-semibold text-sm text-muted-foreground mb-1">
-                {language === 'en' ? 'Related Emotions:' : 'సంబంధిత భావనలు:'}
+              <h4 className="font-semibold text-sm text-muted-foreground mb-2">
+                {language === 'en' ? 'Detailed Emotions:' : 'వివరణాత్మక భావనలు:'}
               </h4>
-              <p className="text-sm">
-                {(getEmotionText(selectedEmotion, 'tertiary') as string[]).join(', ')}
-              </p>
+              <div className="grid grid-cols-2 gap-1 text-sm">
+                {getAllLevel3Emotions(selectedEmotion).map((emotion) => (
+                  <span key={emotion.id} className="text-xs bg-primary/10 rounded px-2 py-1">
+                    {getEmotionName(emotion, language as 'en' | 'te')}
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
         </div>
@@ -164,8 +176,8 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({ language }) => {
       
       <p className="text-sm text-muted-foreground text-center max-w-md">
         {language === 'en' 
-          ? 'Click on any emotion segment to explore its related feelings and understand the spectrum of human emotions.'
-          : 'ఏదైనా భావోద్వేగ విభాగంపై క్లిక్ చేసి దాని సంబంధిత భావాలను అన్వేషించండి మరియు మానవ భావోద్వేగాల వర్ణపటాన్ని అర్థం చేసుకోండి.'
+          ? 'Click on any emotion segment to explore its related feelings and understand the emotional hierarchy.'
+          : 'ఏదైనా భావోద్వేగ విభాగంపై క్లిక్ చేసి దాని సంబంధిత భావాలను అన్వేషించండి మరియు భావోద్వేగ క్రమబద్ధతను అర్థం చేసుకోండి.'
         }
       </p>
     </div>
