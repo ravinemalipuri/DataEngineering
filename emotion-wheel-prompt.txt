@@ -1,0 +1,212 @@
+
+# Interactive Emotion Wheel Application - Complete Prompt
+
+## Project Overview
+Create a responsive, interactive emotion wheel web application that helps users explore and understand human emotions through visual representation. The application should be bilingual (English and Telugu) and built using modern web technologies.
+
+## Core Features
+
+### 1. Interactive Emotion Wheel
+- **Three-level hierarchical emotion system:**
+  - Level 1 (Inner ring): 8 primary emotions with distinct colors
+  - Level 2 (Middle ring): Secondary emotions categorized under primaries
+  - Level 3 (Outer ring): Detailed/tertiary emotions with specific feelings
+
+- **Visual Design:**
+  - Large circular wheel (900x900px) with three concentric rings
+  - Each emotion segment uses color-coded visualization
+  - Smooth hover effects and click interactions
+  - Radially aligned text that rotates with segments
+  - High contrast text with white shadows for readability
+
+- **Interactivity:**
+  - Click primary emotions to view detailed breakdown
+  - Hover effects for visual feedback
+  - Smooth animations and transitions
+  - Responsive design that works on all devices
+
+### 2. Bilingual Support
+- **Languages:** English and Telugu
+- **Complete translation coverage:**
+  - All emotion names (primary, secondary, tertiary)
+  - UI labels and descriptions
+  - Help text and instructions
+  - Navigation elements
+
+### 3. User Interface Components
+
+#### Navigation Bar
+- Language switcher (English/Telugu toggle)
+- Clean, minimal design
+- Responsive layout
+
+#### Hero Section
+- Compelling headline with gradient text effects
+- Descriptive subtitle explaining the purpose
+- Call-to-action button to explore emotions
+- Feature preview cards (Interactive, Multilingual, Responsive)
+- Animated gradient background
+
+#### Features Section
+- Large emotion wheel display
+- Fullscreen viewing option
+- "Understanding the Wheel" explanation with visual indicators
+- Responsive grid layout
+
+#### Emotion Details Panel
+- Appears when primary emotion is selected
+- Shows all related secondary and tertiary emotions
+- Organized in clean, readable format
+- Smooth fade-in animation
+
+### 4. Technical Requirements
+
+#### Frontend Stack
+- **React 18** with TypeScript
+- **Vite** for build tooling
+- **Tailwind CSS** for styling
+- **Shadcn/UI** for component library
+- **Lucide React** for icons
+
+#### Data Structure
+```typescript
+interface EmotionLevel1 {
+  id: string;
+  color: string;
+  en: string;
+  te: string;
+  level2Emotions: EmotionLevel2[];
+}
+
+interface EmotionLevel2 {
+  id: string;
+  en: string;
+  te: string;
+  level3Emotions: EmotionLevel3[];
+}
+
+interface EmotionLevel3 {
+  id: string;
+  en: string;
+  te: string;
+}
+```
+
+#### Emotion Mapping (Complete List)
+
+**Primary Emotions (8 total):**
+1. Happy (సంతోషం) - #FFD700
+2. Sad (విచారకరం) - #4682B4
+3. Disgusted (అసహ్యం) - #9ACD32
+4. Angry (కోపంగా) - #DC143C
+5. Fearful (భయంగా) - #9370DB
+6. Bad (చెడ్డది) - #2F4F4F
+7. Surprised (ఆశ్చర్యపోయాను) - #FF6347
+8. Trust (నమ్మకం) - #20B2AA
+
+**Secondary Emotions (detailed breakdown for each primary):**
+- Each primary emotion has 6-8 secondary emotions
+- Examples: Playful, Content, Interested, Proud, Accepted, Powerful, Peaceful, Trusting, Optimistic (under Happy)
+
+**Tertiary Emotions (detailed breakdown for each secondary):**
+- Each secondary emotion has 2-3 specific tertiary emotions
+- Examples: Aroused, Cheeky (under Playful), Free, Joyful (under Content)
+
+### 5. Component Architecture
+
+#### Main Components
+- `EmotionWheel.tsx` - Core wheel visualization and interaction
+- `EmotionWheelFullscreen.tsx` - Modal fullscreen view
+- `FeaturesSection.tsx` - Main features display
+- `HeroSection.tsx` - Landing section
+- `Navigation.tsx` - Header navigation
+
+#### Utility Functions
+- `getEmotionName()` - Language-specific emotion naming
+- `getAllLevel2Emotions()` - Get all secondary emotions for primary
+- `getAllLevel3Emotions()` - Get all tertiary emotions for primary
+
+### 6. Visual Design Specifications
+
+#### Color Scheme
+- Background: Clean white/light theme
+- Primary colors: Emotion-specific vibrant colors
+- Text: High contrast black with white text-shadow
+- Borders: Clean white separators between segments
+
+#### Typography
+- Headers: Playfair Display (serif)
+- Body: Inter (sans-serif)
+- Sizes: Responsive scaling (9px to 18px for wheel text)
+
+#### Animations
+- Smooth hover transitions (300ms)
+- Fade-in effects for emotion details
+- Pulse effects for interactive elements
+- Smooth scrolling navigation
+
+### 7. Responsive Design
+- **Mobile:** Single column layout, touch-friendly interactions
+- **Tablet:** Optimized wheel size, readable text
+- **Desktop:** Full-featured experience with large wheel
+
+### 8. Accessibility Features
+- High contrast text with shadows
+- Keyboard navigation support
+- Screen reader compatible
+- Touch and mouse interaction support
+
+### 9. Performance Considerations
+- SVG-based wheel for crisp scaling
+- Efficient re-rendering with React state management
+- Optimized bundle size with Vite
+- Smooth 60fps animations
+
+### 10. Future Enhancement Ideas
+- Audio pronunciation for emotion names
+- Emotion journal/tracking features
+- Educational content about emotional intelligence
+- Export/share emotion combinations
+- Dark mode theme
+- Additional language support
+
+## Development Guidelines
+
+### Code Quality
+- TypeScript for type safety
+- Clean, readable component structure
+- Proper error handling
+- Consistent naming conventions
+
+### File Organization
+```
+src/
+├── components/
+│   ├── EmotionWheel.tsx
+│   ├── EmotionWheelFullscreen.tsx
+│   ├── FeaturesSection.tsx
+│   ├── HeroSection.tsx
+│   └── Navigation.tsx
+├── data/
+│   └── emotions.ts
+├── pages/
+│   └── Index.tsx
+└── lib/
+    └── utils.ts
+```
+
+### Best Practices
+- Mobile-first responsive design
+- Component reusability
+- Proper state management
+- Performance optimization
+- Accessibility compliance
+
+## User Experience Goals
+1. **Educational:** Help users understand emotional complexity
+2. **Interactive:** Engage users through exploration
+3. **Inclusive:** Support multiple languages and cultures
+4. **Intuitive:** Easy to navigate and understand
+5. **Accessible:** Usable by people with different abilities
+
+This application serves as both an educational tool and an interactive experience for exploring the rich landscape of human emotions, with particular attention to bilingual support and cultural sensitivity.
