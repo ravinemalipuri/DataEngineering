@@ -2,20 +2,20 @@
 export interface EmotionLevel3 {
   id: string;
   name: string;
-  nameTeluguPlaceholder: string; // Using ??? as placeholder for Telugu translations
+  nameTelugu: string;
 }
 
 export interface EmotionLevel2 {
   id: string;
   name: string;
-  nameTeluguPlaceholder: string;
+  nameTelugu: string;
   level3Emotions: EmotionLevel3[];
 }
 
 export interface EmotionLevel1 {
   id: string;
   name: string;
-  nameTeluguPlaceholder: string;
+  nameTelugu: string;
   color: string;
   angle: number;
   level2Emotions: EmotionLevel2[];
@@ -25,89 +25,89 @@ export const emotionsData: EmotionLevel1[] = [
   {
     id: 'happy',
     name: 'Happy',
-    nameTeluguPlaceholder: '???',
+    nameTelugu: 'సంతోషం',
     color: '#FFD700',
     angle: 0,
     level2Emotions: [
       {
         id: 'playful',
         name: 'Playful',
-        nameTeluguPlaceholder: '???',
+        nameTelugu: 'ఉల్లాసభరితమైన',
         level3Emotions: [
-          { id: 'aroused', name: 'Aroused', nameTeluguPlaceholder: '???' },
-          { id: 'cheeky', name: 'Cheeky', nameTeluguPlaceholder: '???' }
+          { id: 'aroused', name: 'Aroused', nameTelugu: 'రెచ్చిపోయింది' },
+          { id: 'cheeky', name: 'Cheeky', nameTelugu: 'కొంటెయైన?' }
         ]
       },
       {
         id: 'content',
         name: 'Content',
-        nameTeluguPlaceholder: '???',
+        nameTelugu: 'నిమ్మళముగా, తొణకకుండా',
         level3Emotions: [
-          { id: 'free', name: 'Free', nameTeluguPlaceholder: '???' },
-          { id: 'joyful', name: 'Joyful', nameTeluguPlaceholder: '???' }
+          { id: 'free', name: 'Free', nameTelugu: 'ఉచిత' },
+          { id: 'joyful', name: 'Joyful', nameTelugu: 'సంతోషకరమైన' }
         ]
       },
       {
         id: 'interested',
         name: 'Interested',
-        nameTeluguPlaceholder: '???',
+        nameTelugu: 'ఆసక్తి',
         level3Emotions: [
-          { id: 'curious', name: 'Curious', nameTeluguPlaceholder: '???' },
-          { id: 'inquisitive', name: 'Inquisitive', nameTeluguPlaceholder: '???' }
+          { id: 'curious', name: 'Curious', nameTelugu: 'ఉత్సుకత' },
+          { id: 'inquisitive', name: 'InQuisitive', nameTelugu: 'ఆసక్తిగల' }
         ]
       },
       {
         id: 'proud',
         name: 'Proud',
-        nameTeluguPlaceholder: '???',
+        nameTelugu: 'గర్వంగా ఉంది',
         level3Emotions: [
-          { id: 'successful', name: 'Successful', nameTeluguPlaceholder: '???' },
-          { id: 'confident', name: 'Confident', nameTeluguPlaceholder: '???' }
+          { id: 'successful', name: 'Successful', nameTelugu: 'విజయవంతమైంది' },
+          { id: 'confident', name: 'Confident', nameTelugu: 'నమ్మకంగా' }
         ]
       },
       {
         id: 'accepted',
         name: 'Accepted',
-        nameTeluguPlaceholder: '???',
+        nameTelugu: 'అంగీకరించబడింది',
         level3Emotions: [
-          { id: 'respected', name: 'Respected', nameTeluguPlaceholder: '???' },
-          { id: 'valued', name: 'Valued', nameTeluguPlaceholder: '???' }
+          { id: 'respected', name: 'Respected', nameTelugu: 'గౌరవించారు' },
+          { id: 'valued', name: 'Valued', nameTelugu: 'విలువైనది' }
         ]
       },
       {
         id: 'powerful',
         name: 'Powerful',
-        nameTeluguPlaceholder: '???',
+        nameTelugu: 'శక్తివంతమైన',
         level3Emotions: [
-          { id: 'courageous', name: 'Courageous', nameTeluguPlaceholder: '???' },
-          { id: 'creative', name: 'Creative', nameTeluguPlaceholder: '???' }
+          { id: 'courageous', name: 'Courageous', nameTelugu: 'ధైర్యవంతుడు' },
+          { id: 'creative', name: 'Creative', nameTelugu: 'సృజనాత్మకమైనది' }
         ]
       },
       {
         id: 'peaceful',
         name: 'Peaceful',
-        nameTeluguPlaceholder: '???',
+        nameTelugu: 'శాంతియుతమైనది',
         level3Emotions: [
-          { id: 'loving', name: 'Loving', nameTeluguPlaceholder: '???' },
-          { id: 'thankful', name: 'Thankful', nameTeluguPlaceholder: '???' }
+          { id: 'loving', name: 'Loving', nameTelugu: 'ప్రేమించే' },
+          { id: 'thankful', name: 'Thankful', nameTelugu: 'ధన్యవాదములు' }
         ]
       },
       {
         id: 'trusting',
         name: 'Trusting',
-        nameTeluguPlaceholder: '???',
+        nameTelugu: 'విశ్వసించడం',
         level3Emotions: [
-          { id: 'sensitive', name: 'Sensitive', nameTeluguPlaceholder: '???' },
-          { id: 'intimate', name: 'Intimate', nameTeluguPlaceholder: '???' }
+          { id: 'sensitive', name: 'Sensitive', nameTelugu: 'సున్నితమైన' },
+          { id: 'intimate', name: 'Intimate', nameTelugu: 'సన్నిహితుడు' }
         ]
       },
       {
         id: 'optimistic',
         name: 'Optimistic',
-        nameTeluguPlaceholder: '???',
+        nameTelugu: 'ఆశావాది',
         level3Emotions: [
-          { id: 'hopeful', name: 'Hopeful', nameTeluguPlaceholder: '???' },
-          { id: 'inspired', name: 'Inspired', nameTeluguPlaceholder: '???' }
+          { id: 'hopeful', name: 'Hopeful', nameTelugu: 'ఆశాజనకంగా' },
+          { id: 'inspired', name: 'Inspired', nameTelugu: 'ప్రేరణ పొందింది' }
         ]
       }
     ]
@@ -115,62 +115,62 @@ export const emotionsData: EmotionLevel1[] = [
   {
     id: 'sad',
     name: 'Sad',
-    nameTeluguPlaceholder: '???',
+    nameTelugu: 'విచారకరం',
     color: '#4682B4',
-    angle: 51.4,
+    angle: 45,
     level2Emotions: [
       {
         id: 'lonely',
         name: 'Lonely',
-        nameTeluguPlaceholder: '???',
+        nameTelugu: 'ఒంటరి',
         level3Emotions: [
-          { id: 'isolated', name: 'Isolated', nameTeluguPlaceholder: '???' },
-          { id: 'abandoned', name: 'Abandoned', nameTeluguPlaceholder: '???' }
+          { id: 'isolated', name: 'Isolated', nameTelugu: 'ఒంటరిగా' },
+          { id: 'abandoned', name: 'Abandoned', nameTelugu: 'విడిచిపెట్టారు' }
         ]
       },
       {
         id: 'vulnerable',
         name: 'Vulnerable',
-        nameTeluguPlaceholder: '???',
+        nameTelugu: 'దుర్బలమైనది',
         level3Emotions: [
-          { id: 'victimised', name: 'Victimised', nameTeluguPlaceholder: '???' },
-          { id: 'fragile', name: 'Fragile', nameTeluguPlaceholder: '???' }
+          { id: 'victimised', name: 'Victimised', nameTelugu: 'బాధితులయ్యారు' },
+          { id: 'fragile', name: 'Fragile', nameTelugu: 'పెళుసుగా' }
         ]
       },
       {
         id: 'despair',
         name: 'Despair',
-        nameTeluguPlaceholder: '???',
+        nameTelugu: 'నిరాశ',
         level3Emotions: [
-          { id: 'grief', name: 'Grief', nameTeluguPlaceholder: '???' },
-          { id: 'powerless', name: 'Powerless', nameTeluguPlaceholder: '???' }
+          { id: 'grief', name: 'Grief', nameTelugu: 'దుఃఖం' },
+          { id: 'powerless', name: 'Powerless', nameTelugu: 'శక్తిలేని' }
         ]
       },
       {
         id: 'guilty',
         name: 'Guilty',
-        nameTeluguPlaceholder: '???',
+        nameTelugu: 'దోషి',
         level3Emotions: [
-          { id: 'ashamed', name: 'Ashamed', nameTeluguPlaceholder: '???' },
-          { id: 'remorseful', name: 'Remorseful', nameTeluguPlaceholder: '???' }
+          { id: 'ashamed', name: 'Ashamed', nameTelugu: 'సిగ్గుపడింది' },
+          { id: 'remorseful', name: 'Remorseful', nameTelugu: 'పశ్చాత్తాపపడుతుంది' }
         ]
       },
       {
         id: 'depressed',
         name: 'Depressed',
-        nameTeluguPlaceholder: '???',
+        nameTelugu: 'అణగారిన',
         level3Emotions: [
-          { id: 'inferior', name: 'Inferior', nameTeluguPlaceholder: '???' },
-          { id: 'empty', name: 'Empty', nameTeluguPlaceholder: '???' }
+          { id: 'inferior', name: 'Inferior', nameTelugu: 'నాసిరకం' },
+          { id: 'empty', name: 'Empty', nameTelugu: 'ఖాళీ' }
         ]
       },
       {
         id: 'hurt',
         name: 'Hurt',
-        nameTeluguPlaceholder: '???',
+        nameTelugu: 'హర్ట్',
         level3Emotions: [
-          { id: 'embarrassed', name: 'Embarrassed', nameTeluguPlaceholder: '???' },
-          { id: 'disappointed', name: 'Disappointed', nameTeluguPlaceholder: '???' }
+          { id: 'embarrassed', name: 'Embarrassed', nameTelugu: 'సంకటపడే' },
+          { id: 'disappointed', name: 'Disappointed', nameTelugu: 'నిరాశ చెందారు' }
         ]
       }
     ]
@@ -178,44 +178,44 @@ export const emotionsData: EmotionLevel1[] = [
   {
     id: 'disgusted',
     name: 'Disgusted',
-    nameTeluguPlaceholder: '???',
+    nameTelugu: 'అసహ్యం',
     color: '#9ACD32',
-    angle: 102.8,
+    angle: 90,
     level2Emotions: [
       {
         id: 'disapproving',
         name: 'Disapproving',
-        nameTeluguPlaceholder: '???',
+        nameTelugu: 'నిరాకరించడం',
         level3Emotions: [
-          { id: 'judgemental', name: 'Judgemental', nameTeluguPlaceholder: '???' },
-          { id: 'embarrassed-disgust', name: 'Embarrassed', nameTeluguPlaceholder: '???' }
+          { id: 'judgemental', name: 'Judgemental', nameTelugu: 'జడ్జిమెంటల్' },
+          { id: 'embarrassed-disgust', name: 'Embarrassed', nameTelugu: 'సిగ్గుపడింది' }
         ]
       },
       {
         id: 'disappointed-disgust',
         name: 'Disappointed',
-        nameTeluguPlaceholder: '???',
+        nameTelugu: 'నిరాశ చెందారు',
         level3Emotions: [
-          { id: 'appalled', name: 'Appalled', nameTeluguPlaceholder: '???' },
-          { id: 'revolted', name: 'Revolted', nameTeluguPlaceholder: '???' }
+          { id: 'appalled', name: 'Appalled', nameTelugu: 'దిగ్భ్రాంతి చెందాడు' },
+          { id: 'revolted', name: 'Revolted', nameTelugu: 'తిరుగుబాటు చేశారు' }
         ]
       },
       {
         id: 'awful',
         name: 'Awful',
-        nameTeluguPlaceholder: '???',
+        nameTelugu: 'భయంకరం',
         level3Emotions: [
-          { id: 'nauseated', name: 'Nauseated', nameTeluguPlaceholder: '???' },
-          { id: 'detestable', name: 'Detestable', nameTeluguPlaceholder: '???' }
+          { id: 'nauseated', name: 'Nauseated', nameTelugu: 'వికారం' },
+          { id: 'detestable', name: 'Detestable', nameTelugu: 'అసహ్యకరమైన' }
         ]
       },
       {
         id: 'repelled',
         name: 'Repelled',
-        nameTeluguPlaceholder: '???',
+        nameTelugu: 'తిప్పికొట్టారు',
         level3Emotions: [
-          { id: 'horrified', name: 'Horrified', nameTeluguPlaceholder: '???' },
-          { id: 'hesitant', name: 'Hesitant', nameTeluguPlaceholder: '???' }
+          { id: 'horrified', name: 'Horrified', nameTelugu: 'భీతిల్లింది' },
+          { id: 'hesitant', name: 'Hesitant', nameTelugu: 'సంశయం' }
         ]
       }
     ]
@@ -223,80 +223,80 @@ export const emotionsData: EmotionLevel1[] = [
   {
     id: 'angry',
     name: 'Angry',
-    nameTeluguPlaceholder: '???',
+    nameTelugu: 'కోపంగా',
     color: '#DC143C',
-    angle: 154.2,
+    angle: 135,
     level2Emotions: [
       {
         id: 'let-down',
         name: 'Let Down',
-        nameTeluguPlaceholder: '???',
+        nameTelugu: 'లెట్ డౌన్',
         level3Emotions: [
-          { id: 'betrayed', name: 'Betrayed', nameTeluguPlaceholder: '???' },
-          { id: 'resentful', name: 'Resentful', nameTeluguPlaceholder: '???' }
+          { id: 'betrayed', name: 'Betrayed', nameTelugu: 'ద్రోహం చేశారు' },
+          { id: 'resentful', name: 'Resentful', nameTelugu: 'ఆగ్రహంతో' }
         ]
       },
       {
         id: 'humiliated',
         name: 'Humiliated',
-        nameTeluguPlaceholder: '???',
+        nameTelugu: 'అవమానపరిచారు',
         level3Emotions: [
-          { id: 'disrespected', name: 'Disrespected', nameTeluguPlaceholder: '???' },
-          { id: 'ridiculed', name: 'Ridiculed', nameTeluguPlaceholder: '???' }
+          { id: 'disrespected', name: 'Disrespected', nameTelugu: 'అగౌరవపరిచారు' },
+          { id: 'ridiculed', name: 'Ridiculed', nameTelugu: 'ఎగతాళి చేశారు' }
         ]
       },
       {
         id: 'bitter',
         name: 'Bitter',
-        nameTeluguPlaceholder: '???',
+        nameTelugu: 'చేదు',
         level3Emotions: [
-          { id: 'indignant', name: 'Indignant', nameTeluguPlaceholder: '???' },
-          { id: 'violated', name: 'Violated', nameTeluguPlaceholder: '???' }
+          { id: 'indignant', name: 'Indignant', nameTelugu: 'ఆగ్రహంతో' },
+          { id: 'violated', name: 'Violated', nameTelugu: 'ఉల్లంఘించారు' }
         ]
       },
       {
         id: 'mad',
         name: 'Mad',
-        nameTeluguPlaceholder: '???',
+        nameTelugu: 'పిచ్చి',
         level3Emotions: [
-          { id: 'furious', name: 'Furious', nameTeluguPlaceholder: '???' },
-          { id: 'jealous', name: 'Jealous', nameTeluguPlaceholder: '???' }
+          { id: 'furious', name: 'Furious', nameTelugu: 'కోపంతో' },
+          { id: 'jealous', name: 'Jealous', nameTelugu: 'అసూయ' }
         ]
       },
       {
         id: 'aggressive',
         name: 'Aggressive',
-        nameTeluguPlaceholder: '???',
+        nameTelugu: 'దూకుడు',
         level3Emotions: [
-          { id: 'provoked', name: 'Provoked', nameTeluguPlaceholder: '???' },
-          { id: 'hostile', name: 'Hostile', nameTeluguPlaceholder: '???' }
+          { id: 'provoked', name: 'Provoked', nameTelugu: 'రెచ్చిపోయారు' },
+          { id: 'hostile', name: 'Hostile', nameTelugu: 'శత్రుత్వం' }
         ]
       },
       {
         id: 'frustrated',
         name: 'Frustrated',
-        nameTeluguPlaceholder: '???',
+        nameTelugu: 'విసుగు చెందారు',
         level3Emotions: [
-          { id: 'infuriated', name: 'Infuriated', nameTeluguPlaceholder: '???' },
-          { id: 'annoyed', name: 'Annoyed', nameTeluguPlaceholder: '???' }
+          { id: 'infuriated', name: 'Infuriated', nameTelugu: 'చిరచిరలాడడ' },
+          { id: 'annoyed', name: 'Annoyed', nameTelugu: 'చిరాకు' }
         ]
       },
       {
         id: 'distant',
         name: 'Distant',
-        nameTeluguPlaceholder: '???',
+        nameTelugu: 'దూరం',
         level3Emotions: [
-          { id: 'withdrawn', name: 'Withdrawn', nameTeluguPlaceholder: '???' },
-          { id: 'numb', name: 'Numb', nameTeluguPlaceholder: '???' }
+          { id: 'withdrawn', name: 'Withdrawn', nameTelugu: 'ఉపసంహరించుకున్నారు' },
+          { id: 'numb', name: 'Numb', nameTelugu: 'తిమ్మిరి' }
         ]
       },
       {
         id: 'critical',
         name: 'Critical',
-        nameTeluguPlaceholder: '???',
+        nameTelugu: 'క్లిష్టమైన',
         level3Emotions: [
-          { id: 'sceptical', name: 'Sceptical', nameTeluguPlaceholder: '???' },
-          { id: 'dismissive', name: 'Dismissive', nameTeluguPlaceholder: '???' }
+          { id: 'sceptical', name: 'Sceptical', nameTelugu: 'సందేహాస్పదమైనది' },
+          { id: 'dismissive', name: 'Dismissive', nameTelugu: 'నిరాకరణ' }
         ]
       }
     ]
@@ -304,62 +304,62 @@ export const emotionsData: EmotionLevel1[] = [
   {
     id: 'fearful',
     name: 'Fearful',
-    nameTeluguPlaceholder: '???',
+    nameTelugu: 'భయంగా',
     color: '#9370DB',
-    angle: 205.6,
+    angle: 180,
     level2Emotions: [
       {
         id: 'scared',
         name: 'Scared',
-        nameTeluguPlaceholder: '???',
+        nameTelugu: 'భయపడ్డాను',
         level3Emotions: [
-          { id: 'helpless', name: 'Helpless', nameTeluguPlaceholder: '???' },
-          { id: 'frightened', name: 'Frightened', nameTeluguPlaceholder: '???' }
+          { id: 'helpless', name: 'Helpless', nameTelugu: 'నిస్సహాయుడు' },
+          { id: 'frightened', name: 'Frightened', nameTelugu: 'భయపడ్డాను' }
         ]
       },
       {
         id: 'anxious',
         name: 'Anxious',
-        nameTeluguPlaceholder: '???',
+        nameTelugu: 'ఆత్రుత',
         level3Emotions: [
-          { id: 'overwhelmed-fear', name: 'Overwhelmed', nameTeluguPlaceholder: '???' },
-          { id: 'worried', name: 'Worried', nameTeluguPlaceholder: '???' }
+          { id: 'overwhelmed-fear', name: 'Overwhelmed', nameTelugu: 'పొంగిపోయింది' },
+          { id: 'worried', name: 'Worried', nameTelugu: 'ఆందోళన చెందారు' }
         ]
       },
       {
         id: 'insecure',
         name: 'Insecure',
-        nameTeluguPlaceholder: '???',
+        nameTelugu: 'అభద్రత',
         level3Emotions: [
-          { id: 'inadequate', name: 'Inadequate', nameTeluguPlaceholder: '???' },
-          { id: 'inferior-fear', name: 'Inferior', nameTeluguPlaceholder: '???' }
+          { id: 'inadequate', name: 'Inadequate', nameTelugu: 'సరిపోదు' },
+          { id: 'inferior-fear', name: 'Inferior', nameTelugu: 'నాసిరకం' }
         ]
       },
       {
         id: 'weak',
         name: 'Weak',
-        nameTeluguPlaceholder: '???',
+        nameTelugu: 'బలహీనమైనది',
         level3Emotions: [
-          { id: 'worthless', name: 'Worthless', nameTeluguPlaceholder: '???' },
-          { id: 'insignificant', name: 'Insignificant', nameTeluguPlaceholder: '???' }
+          { id: 'worthless', name: 'Worthless', nameTelugu: 'విలువలేనిది' },
+          { id: 'insignificant', name: 'Insignificant', nameTelugu: 'అప్రధానమైనది' }
         ]
       },
       {
         id: 'rejected',
         name: 'Rejected',
-        nameTeluguPlaceholder: '???',
+        nameTelugu: 'తిరస్కరించబడింది',
         level3Emotions: [
-          { id: 'excluded', name: 'Excluded', nameTeluguPlaceholder: '???' },
-          { id: 'persecuted', name: 'Persecuted', nameTeluguPlaceholder: '???' }
+          { id: 'excluded', name: 'Excluded', nameTelugu: 'మినహాయించబడింది' },
+          { id: 'persecuted', name: 'Persecuted', nameTelugu: 'పీడించబడ్డాడు' }
         ]
       },
       {
         id: 'threatened',
         name: 'Threatened',
-        nameTeluguPlaceholder: '???',
+        nameTelugu: 'బెదిరించారు',
         level3Emotions: [
-          { id: 'nervous', name: 'Nervous', nameTeluguPlaceholder: '???' },
-          { id: 'exposed', name: 'Exposed', nameTeluguPlaceholder: '???' }
+          { id: 'nervous', name: 'Nervous', nameTelugu: 'నాడీ' },
+          { id: 'exposed', name: 'Exposed', nameTelugu: 'బహిర్గతమైంది' }
         ]
       }
     ]
@@ -367,44 +367,44 @@ export const emotionsData: EmotionLevel1[] = [
   {
     id: 'bad',
     name: 'Bad',
-    nameTeluguPlaceholder: '???',
+    nameTelugu: 'చెడ్డది',
     color: '#808080',
-    angle: 257,
+    angle: 225,
     level2Emotions: [
       {
         id: 'bored',
         name: 'Bored',
-        nameTeluguPlaceholder: '???',
+        nameTelugu: 'బోర్ కొట్టింది',
         level3Emotions: [
-          { id: 'indifferent', name: 'Indifferent', nameTeluguPlaceholder: '???' },
-          { id: 'apathetic', name: 'Apathetic', nameTeluguPlaceholder: '???' }
+          { id: 'indifferent', name: 'Indifferent', nameTelugu: 'ఉదాసీనం' },
+          { id: 'apathetic', name: 'Apathetic', nameTelugu: 'విరక్తి' }
         ]
       },
       {
         id: 'busy',
         name: 'Busy',
-        nameTeluguPlaceholder: '???',
+        nameTelugu: 'బిజీ',
         level3Emotions: [
-          { id: 'pressured', name: 'Pressured', nameTeluguPlaceholder: '???' },
-          { id: 'rushed', name: 'Rushed', nameTeluguPlaceholder: '???' }
+          { id: 'pressured', name: 'Pressured', nameTelugu: 'ఒత్తిడి చేశారు' },
+          { id: 'rushed', name: 'Rushed', nameTelugu: 'పరుగెత్తింది' }
         ]
       },
       {
         id: 'stressed',
         name: 'Stressed',
-        nameTeluguPlaceholder: '???',
+        nameTelugu: 'ఒత్తిడికి లోనయ్యారు',
         level3Emotions: [
-          { id: 'overwhelmed-bad', name: 'Overwhelmed', nameTeluguPlaceholder: '???' },
-          { id: 'out-of-control', name: 'Out of Control', nameTeluguPlaceholder: '???' }
+          { id: 'overwhelmed-bad', name: 'Overwhelmed', nameTelugu: 'పొంగిపోయింది' },
+          { id: 'out-of-control', name: 'Out of Control', nameTelugu: 'అదుపు తప్పింది' }
         ]
       },
       {
         id: 'tired',
         name: 'Tired',
-        nameTeluguPlaceholder: '???',
+        nameTelugu: 'అలసిపోయింది',
         level3Emotions: [
-          { id: 'sleepy', name: 'Sleepy', nameTeluguPlaceholder: '???' },
-          { id: 'unfocused', name: 'Unfocused', nameTeluguPlaceholder: '???' }
+          { id: 'sleepy', name: 'Sleepy', nameTelugu: 'నిద్ర పోతున్నది' },
+          { id: 'unfocused', name: 'Unfocused', nameTelugu: 'దృష్టి పెట్టలేదు' }
         ]
       }
     ]
@@ -412,44 +412,44 @@ export const emotionsData: EmotionLevel1[] = [
   {
     id: 'surprised',
     name: 'Surprised',
-    nameTeluguPlaceholder: '???',
+    nameTelugu: 'ఆశ్చర్యపోయాను',
     color: '#FF6347',
-    angle: 308.4,
+    angle: 270,
     level2Emotions: [
       {
         id: 'startled',
         name: 'Startled',
-        nameTeluguPlaceholder: '???',
+        nameTelugu: 'స్టార్డ్',
         level3Emotions: [
-          { id: 'shocked', name: 'Shocked', nameTeluguPlaceholder: '???' },
-          { id: 'dismayed', name: 'Dismayed', nameTeluguPlaceholder: '???' }
+          { id: 'shocked', name: 'Shocked', nameTelugu: 'షాక్ అయ్యాను' },
+          { id: 'dismayed', name: 'Dismayed', nameTelugu: 'విస్తుపోయారు' }
         ]
       },
       {
         id: 'confused',
         name: 'Confused',
-        nameTeluguPlaceholder: '???',
+        nameTelugu: 'అయోమయంలో పడ్డారు',
         level3Emotions: [
-          { id: 'disillusioned', name: 'Disillusioned', nameTeluguPlaceholder: '???' },
-          { id: 'perplexed', name: 'Perplexed', nameTeluguPlaceholder: '???' }
+          { id: 'disillusioned', name: 'Disillusioned', nameTelugu: 'భ్రమపడ్డాడు' },
+          { id: 'perplexed', name: 'Perplexed', nameTelugu: 'ప్రీప్లెక్స్డ్' }
         ]
       },
       {
         id: 'amazed',
         name: 'Amazed',
-        nameTeluguPlaceholder: '???',
+        nameTelugu: 'ఆశ్చర్యపోయాడు',
         level3Emotions: [
-          { id: 'astonished', name: 'Astonished', nameTeluguPlaceholder: '???' },
-          { id: 'awe', name: 'Awe', nameTeluguPlaceholder: '???' }
+          { id: 'astonished', name: 'Astonished', nameTelugu: 'ఆశ్చర్యపోయాడు' },
+          { id: 'awe', name: 'Awe', nameTelugu: 'విస్మయం' }
         ]
       },
       {
         id: 'excited',
         name: 'Excited',
-        nameTeluguPlaceholder: '???',
+        nameTelugu: 'నిష్క్రమించారు',
         level3Emotions: [
-          { id: 'eager', name: 'Eager', nameTeluguPlaceholder: '???' },
-          { id: 'energetic', name: 'Energetic', nameTeluguPlaceholder: '???' }
+          { id: 'eager', name: 'Eager', nameTelugu: 'ఆత్రుత' },
+          { id: 'energetic', name: 'Energetic', nameTelugu: 'ఎనర్జిటిక్' }
         ]
       }
     ]
@@ -460,7 +460,7 @@ export const getEmotionName = (emotion: EmotionLevel1 | EmotionLevel2 | EmotionL
   if (language === 'en') {
     return emotion.name;
   }
-  return emotion.nameTeluguPlaceholder;
+  return emotion.nameTelugu;
 };
 
 export const getAllLevel3Emotions = (primaryEmotion: EmotionLevel1): EmotionLevel3[] => {

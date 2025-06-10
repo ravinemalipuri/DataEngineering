@@ -1,5 +1,6 @@
+
 import React, { useState } from 'react';
-import { emotionsData, getEmotionName, getAllLevel2Emotions, getAllLevel3Emotions, EmotionLevel1, EmotionLevel2 } from '@/data/emotions';
+import { emotionsData, getEmotionName, getAllLevel2Emotions, getAllLevel3Emotions, EmotionLevel1, EmotionLevel2, EmotionLevel3 } from '@/data/emotions';
 
 interface EmotionWheelProps {
   language: string;
@@ -9,18 +10,19 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({ language }) => {
   const [selectedEmotion, setSelectedEmotion] = useState<EmotionLevel1 | null>(null);
   const [hoveredEmotion, setHoveredEmotion] = useState<string | null>(null);
 
-  const createEmotionSegment = (emotion: EmotionLevel1, radius: number, strokeWidth: number, intensity: number) => {
-    const centerX = 200;
-    const centerY = 200;
-    const segmentAngle = 360 / emotionsData.length;
+  const createLevel1Segment = (emotion: EmotionLevel1) => {
+    const centerX = 250;
+    const centerY = 250;
+    const numPrimary = emotionsData.length;
+    const segmentAngle = 360 / numPrimary;
     const startAngle = emotion.angle - segmentAngle / 2;
     const endAngle = emotion.angle + segmentAngle / 2;
     
     const startAngleRad = (startAngle * Math.PI) / 180;
     const endAngleRad = (endAngle * Math.PI) / 180;
     
-    const innerRadius = radius - strokeWidth;
-    const outerRadius = radius;
+    const innerRadius = 50;
+    const outerRadius = 100;
     
     const x1 = centerX + innerRadius * Math.cos(startAngleRad);
     const y1 = centerY + innerRadius * Math.sin(startAngleRad);
@@ -46,73 +48,244 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({ language }) => {
     const isHovered = hoveredEmotion === emotion.id;
     const isSelected = selectedEmotion?.id === emotion.id;
     
-    // Calculate text position and rotation for radial alignment
-    const textRadius = radius - strokeWidth / 2;
+    const textRadius = (innerRadius + outerRadius) / 2;
     const textAngle = emotion.angle;
     const textAngleRad = (textAngle * Math.PI) / 180;
     const textX = centerX + textRadius * Math.cos(textAngleRad);
     const textY = centerY + textRadius * Math.sin(textAngleRad);
     
-    // Determine text rotation - keep text readable by avoiding upside-down text
     let textRotation = textAngle;
     if (textAngle > 90 && textAngle < 270) {
       textRotation = textAngle + 180;
     }
     
     return (
-      <g key={`${emotion.id}-${intensity}`}>
+      <g key={emotion.id}>
         <path
           d={pathData}
           fill={emotion.color}
-          fillOpacity={intensity + (isHovered ? 0.2 : 0)}
+          fillOpacity={0.9 + (isHovered ? 0.1 : 0)}
           stroke="white"
-          strokeWidth="1"
+          strokeWidth="2"
           className={`transition-all duration-300 cursor-pointer ${isSelected ? 'drop-shadow-lg' : ''}`}
           onMouseEnter={() => setHoveredEmotion(emotion.id)}
           onMouseLeave={() => setHoveredEmotion(null)}
           onClick={() => setSelectedEmotion(selectedEmotion?.id === emotion.id ? null : emotion)}
         />
-        {intensity === 1 && (
+        <text
+          x={textX}
+          y={textY}
+          textAnchor="middle"
+          dominantBaseline="middle"
+          fill="white"
+          fontSize="12"
+          fontWeight="700"
+          className="pointer-events-none font-inter"
+          style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.8)' }}
+          transform={`rotate(${textRotation} ${textX} ${textY})`}
+        >
+          {getEmotionName(emotion, language as 'en' | 'te')}
+        </text>
+      </g>
+    );
+  };
+
+  const createLevel2Segments = (primaryEmotion: EmotionLevel1) => {
+    const centerX = 250;
+    const centerY = 250;
+    const numPrimary = emotionsData.length;
+    const primarySegmentAngle = 360 / numPrimary;
+    const primaryStartAngle = primaryEmotion.angle - primarySegmentAngle / 2;
+    
+    const level2Emotions = primaryEmotion.level2Emotions;
+    const numLevel2 = level2Emotions.length;
+    const level2SegmentAngle = primarySegmentAngle / numLevel2;
+    
+    return level2Emotions.map((emotion, index) => {
+      const startAngle = primaryStartAngle + (index * level2SegmentAngle);
+      const endAngle = primaryStartAngle + ((index + 1) * level2SegmentAngle);
+      
+      const startAngleRad = (startAngle * Math.PI) / 180;
+      const endAngleRad = (endAngle * Math.PI) / 180;
+      
+      const innerRadius = 100;
+      const outerRadius = 150;
+      
+      const x1 = centerX + innerRadius * Math.cos(startAngleRad);
+      const y1 = centerY + innerRadius * Math.sin(startAngleRad);
+      const x2 = centerX + outerRadius * Math.cos(startAngleRad);
+      const y2 = centerY + outerRadius * Math.sin(startAngleRad);
+      
+      const x3 = centerX + outerRadius * Math.cos(endAngleRad);
+      const y3 = centerY + outerRadius * Math.sin(endAngleRad);
+      const x4 = centerX + innerRadius * Math.cos(endAngleRad);
+      const y4 = centerY + innerRadius * Math.sin(endAngleRad);
+      
+      const largeArcFlag = level2SegmentAngle > 180 ? 1 : 0;
+      
+      const pathData = [
+        `M ${x1} ${y1}`,
+        `L ${x2} ${y2}`,
+        `A ${outerRadius} ${outerRadius} 0 ${largeArcFlag} 1 ${x3} ${y3}`,
+        `L ${x4} ${y4}`,
+        `A ${innerRadius} ${innerRadius} 0 ${largeArcFlag} 0 ${x1} ${y1}`,
+        'Z'
+      ].join(' ');
+
+      const textRadius = (innerRadius + outerRadius) / 2;
+      const textAngle = startAngle + (level2SegmentAngle / 2);
+      const textAngleRad = (textAngle * Math.PI) / 180;
+      const textX = centerX + textRadius * Math.cos(textAngleRad);
+      const textY = centerY + textRadius * Math.sin(textAngleRad);
+      
+      let textRotation = textAngle;
+      if (textAngle > 90 && textAngle < 270) {
+        textRotation = textAngle + 180;
+      }
+      
+      return (
+        <g key={`${primaryEmotion.id}-${emotion.id}`}>
+          <path
+            d={pathData}
+            fill={primaryEmotion.color}
+            fillOpacity={0.7}
+            stroke="white"
+            strokeWidth="1"
+            className="cursor-pointer"
+          />
           <text
             x={textX}
             y={textY}
             textAnchor="middle"
             dominantBaseline="middle"
             fill="white"
-            fontSize="11"
-            fontWeight="700"
+            fontSize="9"
+            fontWeight="600"
             className="pointer-events-none font-inter"
             style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.8)' }}
             transform={`rotate(${textRotation} ${textX} ${textY})`}
           >
             {getEmotionName(emotion, language as 'en' | 'te')}
           </text>
-        )}
-      </g>
-    );
+        </g>
+      );
+    });
+  };
+
+  const createLevel3Segments = (primaryEmotion: EmotionLevel1) => {
+    const centerX = 250;
+    const centerY = 250;
+    const numPrimary = emotionsData.length;
+    const primarySegmentAngle = 360 / numPrimary;
+    const primaryStartAngle = primaryEmotion.angle - primarySegmentAngle / 2;
+    
+    const level2Emotions = primaryEmotion.level2Emotions;
+    const numLevel2 = level2Emotions.length;
+    const level2SegmentAngle = primarySegmentAngle / numLevel2;
+    
+    const allLevel3Segments: JSX.Element[] = [];
+    
+    level2Emotions.forEach((level2Emotion, level2Index) => {
+      const level2StartAngle = primaryStartAngle + (level2Index * level2SegmentAngle);
+      const level3Emotions = level2Emotion.level3Emotions;
+      const numLevel3 = level3Emotions.length;
+      const level3SegmentAngle = level2SegmentAngle / numLevel3;
+      
+      level3Emotions.forEach((emotion, level3Index) => {
+        const startAngle = level2StartAngle + (level3Index * level3SegmentAngle);
+        const endAngle = level2StartAngle + ((level3Index + 1) * level3SegmentAngle);
+        
+        const startAngleRad = (startAngle * Math.PI) / 180;
+        const endAngleRad = (endAngle * Math.PI) / 180;
+        
+        const innerRadius = 150;
+        const outerRadius = 200;
+        
+        const x1 = centerX + innerRadius * Math.cos(startAngleRad);
+        const y1 = centerY + innerRadius * Math.sin(startAngleRad);
+        const x2 = centerX + outerRadius * Math.cos(startAngleRad);
+        const y2 = centerY + outerRadius * Math.sin(startAngleRad);
+        
+        const x3 = centerX + outerRadius * Math.cos(endAngleRad);
+        const y3 = centerY + outerRadius * Math.sin(endAngleRad);
+        const x4 = centerX + innerRadius * Math.cos(endAngleRad);
+        const y4 = centerY + innerRadius * Math.sin(endAngleRad);
+        
+        const largeArcFlag = level3SegmentAngle > 180 ? 1 : 0;
+        
+        const pathData = [
+          `M ${x1} ${y1}`,
+          `L ${x2} ${y2}`,
+          `A ${outerRadius} ${outerRadius} 0 ${largeArcFlag} 1 ${x3} ${y3}`,
+          `L ${x4} ${y4}`,
+          `A ${innerRadius} ${innerRadius} 0 ${largeArcFlag} 0 ${x1} ${y1}`,
+          'Z'
+        ].join(' ');
+
+        const textRadius = (innerRadius + outerRadius) / 2;
+        const textAngle = startAngle + (level3SegmentAngle / 2);
+        const textAngleRad = (textAngle * Math.PI) / 180;
+        const textX = centerX + textRadius * Math.cos(textAngleRad);
+        const textY = centerY + textRadius * Math.sin(textAngleRad);
+        
+        let textRotation = textAngle;
+        if (textAngle > 90 && textAngle < 270) {
+          textRotation = textAngle + 180;
+        }
+        
+        allLevel3Segments.push(
+          <g key={`${primaryEmotion.id}-${level2Emotion.id}-${emotion.id}`}>
+            <path
+              d={pathData}
+              fill={primaryEmotion.color}
+              fillOpacity={0.4}
+              stroke="white"
+              strokeWidth="1"
+              className="cursor-pointer"
+            />
+            <text
+              x={textX}
+              y={textY}
+              textAnchor="middle"
+              dominantBaseline="middle"
+              fill="white"
+              fontSize="7"
+              fontWeight="500"
+              className="pointer-events-none font-inter"
+              style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.8)' }}
+              transform={`rotate(${textRotation} ${textX} ${textY})`}
+            >
+              {getEmotionName(emotion, language as 'en' | 'te')}
+            </text>
+          </g>
+        );
+      });
+    });
+    
+    return allLevel3Segments;
   };
 
   return (
     <div className="flex flex-col items-center space-y-8">
       <div className="relative">
-        <svg width="400" height="400" viewBox="0 0 400 400" className="w-full max-w-lg">
-          {/* Outer ring - Level 3 emotions */}
-          {emotionsData.map(emotion => createEmotionSegment(emotion, 180, 60, 0.4))}
+        <svg width="500" height="500" viewBox="0 0 500 500" className="w-full max-w-2xl">
+          {/* Level 3 segments (outermost) */}
+          {emotionsData.map(emotion => createLevel3Segments(emotion))}
           
-          {/* Middle ring - Level 2 emotions */}
-          {emotionsData.map(emotion => createEmotionSegment(emotion, 120, 40, 0.7))}
+          {/* Level 2 segments (middle) */}
+          {emotionsData.map(emotion => createLevel2Segments(emotion))}
           
-          {/* Inner ring - Primary emotions */}
-          {emotionsData.map(emotion => createEmotionSegment(emotion, 80, 40, 1))}
+          {/* Level 1 segments (innermost) */}
+          {emotionsData.map(emotion => createLevel1Segment(emotion))}
           
           {/* Center circle */}
           <circle
-            cx="200"
-            cy="200"
-            r="40"
+            cx="250"
+            cy="250"
+            r="50"
             fill="url(#centerGradient)"
             stroke="white"
-            strokeWidth="2"
+            strokeWidth="3"
           />
           
           <defs>
@@ -123,12 +296,12 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({ language }) => {
           </defs>
           
           <text
-            x="200"
-            y="200"
+            x="250"
+            y="250"
             textAnchor="middle"
             dominantBaseline="middle"
             fill="#333"
-            fontSize="14"
+            fontSize="16"
             fontWeight="700"
             className="font-playfair"
           >
