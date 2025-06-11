@@ -1,6 +1,5 @@
-
 import React, { useState } from 'react';
-import { emotionsData, getAllLevel2Emotions, getAllLevel3Emotions, EmotionLevel1, EmotionLevel2, EmotionLevel3 } from '@/data/emotions';
+import { getEmotionsData, getAllLevel2Emotions, getAllLevel3Emotions, EmotionLevel1, EmotionLevel2, EmotionLevel3, getEmotionName as getEmotionNameFromData } from '@/data/emotions';
 import { getEmotionName } from '@/translations';
 import { Language } from '@/translations';
 
@@ -11,6 +10,9 @@ interface EmotionWheelProps {
 const EmotionWheel: React.FC<EmotionWheelProps> = ({ language }) => {
   const [selectedEmotion, setSelectedEmotion] = useState<EmotionLevel1 | null>(null);
   const [hoveredEmotion, setHoveredEmotion] = useState<string | null>(null);
+  
+  // Get emotions data based on current language
+  const emotionsData = getEmotionsData(language as Language);
   
   // Larger wheel dimensions
   const svgSize = 1200;
@@ -23,6 +25,26 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({ language }) => {
   const level2OuterRadius = svgSize * 0.23;
   const level3InnerRadius = level2OuterRadius;
   const level3OuterRadius = svgSize * 0.32;
+
+  // Helper function to get appropriate font size based on language
+  const getFontSize = (text: string, baseSize: number, level: number = 1) => {
+    const isTeluguOrTamil = language === 'te' || language === 'ta';
+    let multiplier = 1;
+    
+    if (isTeluguOrTamil) {
+      // Reduce font size for Telugu/Tamil based on level
+      if (level === 1) multiplier = 0.7; // Level 1 (primary emotions)
+      else if (level === 2) multiplier = 0.6; // Level 2 (secondary emotions)
+      else multiplier = 0.5; // Level 3 (tertiary emotions)
+    }
+    
+    return Math.min(baseSize * multiplier, Math.max(baseSize * multiplier * 0.5, (baseSize * multiplier * 400) / text.length));
+  };
+
+  // Helper function to get emotion name - use data-based function for better performance
+  const getEmotionDisplayName = (emotion: any): string => {
+    return getEmotionNameFromData(emotion, language as Language);
+  };
 
   const createLevel1Segment = (emotion: EmotionLevel1, index: number, total: number) => {
     const numPrimary = total;
@@ -68,8 +90,8 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({ language }) => {
       textRotation = textAngle + 180;
     }
     
-    const emotionName = getEmotionName(emotion, language as Language);
-    const fontSize = Math.min(22, Math.max(18, 600 / emotionName.length));
+    const emotionName = getEmotionDisplayName(emotion);
+    const fontSize = getFontSize(emotionName, 22, 1);
     
     return (
       <g key={emotion.id} className="emotion-segment">
@@ -151,9 +173,8 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({ language }) => {
         textRotation = textAngle + 180;
       }
 
-      const emotionName = getEmotionName(emotion, language as Language);
-      // Adaptive font size based on text length and segment size
-      const fontSize = Math.min(18, Math.max(11, 350 / emotionName.length));
+      const emotionName = getEmotionDisplayName(emotion);
+      const fontSize = getFontSize(emotionName, 18, 2);
       
       return (
         <g key={`${primaryEmotion.id}-${emotion.id}`} className="emotion-segment">
@@ -241,9 +262,8 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({ language }) => {
           textRotation = textAngle + 180;
         }
 
-        const emotionName = getEmotionName(emotion, language as Language);
-        // Adaptive font size based on text length
-        const fontSize = Math.min(14, Math.max(9, 200 / emotionName.length));
+        const emotionName = getEmotionDisplayName(emotion);
+        const fontSize = getFontSize(emotionName, 14, 3);
         
         allLevel3Segments.push(
           <g key={`${primaryEmotion.id}-${level2Emotion.id}-${emotion.id}`} className="emotion-segment">
@@ -319,7 +339,7 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({ language }) => {
             fontWeight="700"
             className="font-playfair"
           >
-            {getEmotionName({ id: 'main.emotions' }, language as Language)}
+            {getTranslation('main.emotions', language as Language)}
           </text>
         </svg>
       </div>
@@ -328,7 +348,7 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({ language }) => {
       {selectedEmotion && (
         <div className="bg-card border border-border rounded-lg p-6 w-full max-w-md mx-auto animate-fade-in">
           <h3 className="text-xl font-playfair font-semibold mb-4 text-center">
-            {getEmotionName(selectedEmotion, language as Language)}
+            {getEmotionDisplayName(selectedEmotion)}
           </h3>
           
           <div className="space-y-3">
@@ -340,7 +360,7 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({ language }) => {
               <div className="grid grid-cols-2 gap-1 text-sm">
                 {getAllLevel2Emotions(selectedEmotion).map((emotion) => (
                   <span key={emotion.id} className="text-xs bg-accent/20 rounded px-2 py-1">
-                    {getEmotionName(emotion, language as Language)}
+                    {getEmotionDisplayName(emotion)}
                   </span>
                 ))}
               </div>
@@ -354,7 +374,7 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({ language }) => {
               <div className="grid grid-cols-2 gap-1 text-sm">
                 {getAllLevel3Emotions(selectedEmotion).map((emotion) => (
                   <span key={emotion.id} className="text-xs bg-primary/10 rounded px-2 py-1">
-                    {getEmotionName(emotion, language as Language)}
+                    {getEmotionDisplayName(emotion)}
                   </span>
                 ))}
               </div>
@@ -364,7 +384,7 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({ language }) => {
       )}
       
       <p className="text-sm text-muted-foreground text-center max-w-md">
-        {getEmotionName({ id: 'main.clickExplore' }, language as Language)}
+        {getTranslation('main.clickExplore', language as Language)}
       </p>
     </div>
   );
