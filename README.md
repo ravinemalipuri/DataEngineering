@@ -1,8 +1,23 @@
+
 # Welcome to your Lovable project
 
 ## Project info
 
 **URL**: https://lovable.dev/projects/02f77215-350a-444d-b65d-580b5679d1a3
+
+## Live Preview
+
+🌐 **Test the application**: [Live Demo](https://lovable.dev/projects/02f77215-350a-444d-b65d-580b5679d1a3)
+
+📱 **Mobile Preview**: The application is fully responsive and works on all devices
+
+## Interactive Emotion Wheel Features
+
+- **Multilingual Support**: Currently supports English and Telugu, with Spanish coming soon
+- **Three-level emotion hierarchy**: Primary, Secondary, and Detailed emotions
+- **Interactive exploration**: Click on emotion segments to explore related feelings
+- **Responsive design**: Works seamlessly on desktop, tablet, and mobile devices
+- **Fullscreen mode**: Enhanced viewing experience for better emotion exploration
 
 ## How can I edit this code?
 
@@ -59,6 +74,23 @@ This project is built with:
 - React
 - shadcn-ui
 - Tailwind CSS
+
+## Translation Collaboration
+
+The application supports multiple languages through translation files located in `src/translations/`. 
+
+### Adding New Languages
+
+1. Create a new translation file in `src/translations/` (e.g., `spanish.ts`, `tamil.ts`)
+2. Follow the existing translation structure
+3. Update the language selector in the navigation
+4. Contributors can edit individual translation files for collaborative translation work
+
+### Current Languages
+- English (en)
+- Telugu (te)
+- Spanish (es) - Coming soon
+- Tamil (ta) - Coming soon
 
 ## How can I deploy this project?
 

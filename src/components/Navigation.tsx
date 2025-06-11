@@ -3,10 +3,11 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Menu, X, Globe } from 'lucide-react';
+import { Language, languageNames, getTranslation } from '@/translations';
 
 interface NavigationProps {
-  currentLanguage: string;
-  onLanguageChange: (lang: string) => void;
+  currentLanguage: Language;
+  onLanguageChange: (lang: Language) => void;
 }
 
 const Navigation: React.FC<NavigationProps> = ({ currentLanguage, onLanguageChange }) => {
@@ -21,11 +22,13 @@ const Navigation: React.FC<NavigationProps> = ({ currentLanguage, onLanguageChan
   };
 
   const navItems = [
-    { id: 'hero', label: 'Home', labelTe: 'హోమ్' },
-    { id: 'about', label: 'About', labelTe: 'గురించి' },
-    { id: 'features', label: 'Features', labelTe: 'లక్షణాలు' },
-    { id: 'contact', label: 'Contact', labelTe: 'సంప్రదింపులు' }
+    { id: 'hero', label: 'nav.home' },
+    { id: 'about', label: 'nav.about' },
+    { id: 'features', label: 'nav.features' },
+    { id: 'contact', label: 'nav.contact' }
   ];
+  
+  const availableLanguages: Language[] = ['en', 'te', 'es', 'ta'];
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
@@ -35,7 +38,7 @@ const Navigation: React.FC<NavigationProps> = ({ currentLanguage, onLanguageChan
           <div className="flex items-center space-x-2">
             <div className="w-8 h-8 rounded-full bg-gradient-to-br from-emotion-joy to-emotion-anger"></div>
             <span className="font-playfair font-bold text-xl text-foreground">
-              {currentLanguage === 'en' ? 'Emotion Wheel' : 'భావోద్వేగ చక్రం'}
+              {getTranslation('nav.emotionWheel', currentLanguage)}
             </span>
           </div>
 
@@ -47,20 +50,23 @@ const Navigation: React.FC<NavigationProps> = ({ currentLanguage, onLanguageChan
                 onClick={() => scrollToSection(item.id)}
                 className="text-foreground hover:text-primary transition-colors duration-200 font-medium"
               >
-                {currentLanguage === 'en' ? item.label : item.labelTe}
+                {getTranslation(item.label, currentLanguage)}
               </button>
             ))}
             
             {/* Language Selector */}
             <div className="flex items-center space-x-2">
               <Globe className="w-4 h-4 text-muted-foreground" />
-              <Select value={currentLanguage} onValueChange={onLanguageChange}>
+              <Select value={currentLanguage} onValueChange={(value) => onLanguageChange(value as Language)}>
                 <SelectTrigger className="w-24 h-8">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="en">EN</SelectItem>
-                  <SelectItem value="te">తె</SelectItem>
+                  {availableLanguages.map(lang => (
+                    <SelectItem key={lang} value={lang}>
+                      {languageNames[lang]}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
@@ -68,13 +74,16 @@ const Navigation: React.FC<NavigationProps> = ({ currentLanguage, onLanguageChan
 
           {/* Mobile Menu Button */}
           <div className="md:hidden flex items-center space-x-2">
-            <Select value={currentLanguage} onValueChange={onLanguageChange}>
-              <SelectTrigger className="w-16 h-8">
+            <Select value={currentLanguage} onValueChange={(value) => onLanguageChange(value as Language)}>
+              <SelectTrigger className="w-20 h-8">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="en">EN</SelectItem>
-                <SelectItem value="te">తె</SelectItem>
+                {availableLanguages.map(lang => (
+                  <SelectItem key={lang} value={lang}>
+                    {languageNames[lang]}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
             
@@ -99,7 +108,7 @@ const Navigation: React.FC<NavigationProps> = ({ currentLanguage, onLanguageChan
                   onClick={() => scrollToSection(item.id)}
                   className="text-left text-foreground hover:text-primary transition-colors duration-200 font-medium py-2"
                 >
-                  {currentLanguage === 'en' ? item.label : item.labelTe}
+                  {getTranslation(item.label, currentLanguage)}
                 </button>
               ))}
             </div>

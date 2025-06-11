@@ -2,6 +2,7 @@
 import React from 'react';
 import EmotionWheel from './EmotionWheel';
 import EmotionWheelFullscreen from './EmotionWheelFullscreen';
+import { Language, getTranslation } from '@/translations';
 
 interface FeaturesSectionProps {
   language: string;
@@ -13,17 +14,14 @@ const FeaturesSection: React.FC<FeaturesSectionProps> = ({ language }) => {
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-playfair font-bold mb-6">
-            {language === 'en' ? 'Interactive Emotion Wheel' : 'ఇంటరాక్టివ్ భావోద్వేగ చక్రం'}
+            {getTranslation('main.interactiveEmotionWheel', language as Language)}
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            {language === 'en'
-              ? 'Explore the complete spectrum of human emotions. Click on any segment to discover related feelings and understand emotional connections.'
-              : 'మానవ భావోద్వేగాల పూర్తి వర్ణపటాన్ని అన్వేషించండి. సంబంధిత భావాలను కనుగొనడానికి మరియు భావోద్వేగ కనెక్షన్లను అర్థం చేసుకోవడానికి ఏదైనా విభాగంపై క్లిక్ చేయండి.'
-            }
+            {getTranslation('main.exploreSpectrum', language as Language)}
           </p>
         </div>
 
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-6xl mx-auto">
           <EmotionWheel language={language} />
           
           {/* Fullscreen Button */}
@@ -35,37 +33,37 @@ const FeaturesSection: React.FC<FeaturesSectionProps> = ({ language }) => {
         {/* Understanding the Wheel */}
         <div className="mt-16 bg-card rounded-xl p-8 border border-border">
           <h3 className="text-xl font-playfair font-semibold mb-6 text-center">
-            {language === 'en' ? 'Understanding the Wheel' : 'చక్రాన్ని అర్థం చేసుకోవడం'}
+            {getTranslation('main.understandingWheel', language as Language)}
           </h3>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="text-center">
               <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#FFD700] to-[#DC143C] mx-auto mb-3 opacity-100"></div>
               <h4 className="font-semibold mb-2">
-                {language === 'en' ? 'Primary Emotions' : 'ప్రాథమిక భావోద్వేగాలు'}
+                {getTranslation('main.primaryEmotions', language as Language)}
               </h4>
               <p className="text-sm text-muted-foreground">
-                {language === 'en' ? 'Core emotions - inner ring' : 'ప్రధాన భావోద్వేగాలు - అంతర్గత వలయం'}
+                {getTranslation('main.coreEmotionsInner', language as Language)}
               </p>
             </div>
             
             <div className="text-center">
               <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#4682B4] to-[#9370DB] mx-auto mb-3 opacity-70"></div>
               <h4 className="font-semibold mb-2">
-                {language === 'en' ? 'Secondary Emotions' : 'ద్వితీయ భావోద్వేగాలు'}
+                {getTranslation('main.secondaryEmotions', language as Language)}
               </h4>
               <p className="text-sm text-muted-foreground">
-                {language === 'en' ? 'Emotion categories - middle ring' : 'భావోద్వేగ వర్గాలు - మధ్య వలయం'}
+                {getTranslation('main.emotionCategoriesMiddle', language as Language)}
               </p>
             </div>
             
             <div className="text-center">
               <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#9ACD32] to-[#FF6347] mx-auto mb-3 opacity-40"></div>
               <h4 className="font-semibold mb-2">
-                {language === 'en' ? 'Detailed Emotions' : 'వివరణాత్మక భావోద్వేగాలు'}
+                {getTranslation('main.detailedEmotions', language as Language)}
               </h4>
               <p className="text-sm text-muted-foreground">
-                {language === 'en' ? 'Specific feelings - outer ring' : 'నిర్దిష్ట భావాలు - బాహ్య వలయం'}
+                {getTranslation('main.specificFeelingsOuter', language as Language)}
               </p>
             </div>
           </div>

@@ -1,6 +1,8 @@
 
 import React, { useState } from 'react';
-import { emotionsData, getEmotionName, getAllLevel2Emotions, getAllLevel3Emotions, EmotionLevel1, EmotionLevel2, EmotionLevel3 } from '@/data/emotions';
+import { emotionsData, getAllLevel2Emotions, getAllLevel3Emotions, EmotionLevel1, EmotionLevel2, EmotionLevel3 } from '@/data/emotions';
+import { getEmotionName } from '@/translations';
+import { Language } from '@/translations';
 
 interface EmotionWheelProps {
   language: string;
@@ -9,10 +11,20 @@ interface EmotionWheelProps {
 const EmotionWheel: React.FC<EmotionWheelProps> = ({ language }) => {
   const [selectedEmotion, setSelectedEmotion] = useState<EmotionLevel1 | null>(null);
   const [hoveredEmotion, setHoveredEmotion] = useState<string | null>(null);
+  
+  // Larger wheel dimensions
+  const svgSize = 1200;
+  const centerX = svgSize / 2;
+  const centerY = svgSize / 2;
+  const innerRadius = svgSize * 0.07; // Center circle
+  const level1InnerRadius = innerRadius;
+  const level1OuterRadius = svgSize * 0.15;
+  const level2InnerRadius = level1OuterRadius;
+  const level2OuterRadius = svgSize * 0.23;
+  const level3InnerRadius = level2OuterRadius;
+  const level3OuterRadius = svgSize * 0.32;
 
   const createLevel1Segment = (emotion: EmotionLevel1, index: number, total: number) => {
-    const centerX = 350;
-    const centerY = 350;
     const numPrimary = total;
     const segmentAngle = 360 / numPrimary;
     const startAngle = index * segmentAngle;
@@ -21,34 +33,31 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({ language }) => {
     const startAngleRad = (startAngle * Math.PI) / 180;
     const endAngleRad = (endAngle * Math.PI) / 180;
     
-    const innerRadius = 70;
-    const outerRadius = 140;
+    const x1 = centerX + level1InnerRadius * Math.cos(startAngleRad);
+    const y1 = centerY + level1InnerRadius * Math.sin(startAngleRad);
+    const x2 = centerX + level1OuterRadius * Math.cos(startAngleRad);
+    const y2 = centerY + level1OuterRadius * Math.sin(startAngleRad);
     
-    const x1 = centerX + innerRadius * Math.cos(startAngleRad);
-    const y1 = centerY + innerRadius * Math.sin(startAngleRad);
-    const x2 = centerX + outerRadius * Math.cos(startAngleRad);
-    const y2 = centerY + outerRadius * Math.sin(startAngleRad);
-    
-    const x3 = centerX + outerRadius * Math.cos(endAngleRad);
-    const y3 = centerY + outerRadius * Math.sin(endAngleRad);
-    const x4 = centerX + innerRadius * Math.cos(endAngleRad);
-    const y4 = centerY + innerRadius * Math.sin(endAngleRad);
+    const x3 = centerX + level1OuterRadius * Math.cos(endAngleRad);
+    const y3 = centerY + level1OuterRadius * Math.sin(endAngleRad);
+    const x4 = centerX + level1InnerRadius * Math.cos(endAngleRad);
+    const y4 = centerY + level1InnerRadius * Math.sin(endAngleRad);
     
     const largeArcFlag = segmentAngle > 180 ? 1 : 0;
     
     const pathData = [
       `M ${x1} ${y1}`,
       `L ${x2} ${y2}`,
-      `A ${outerRadius} ${outerRadius} 0 ${largeArcFlag} 1 ${x3} ${y3}`,
+      `A ${level1OuterRadius} ${level1OuterRadius} 0 ${largeArcFlag} 1 ${x3} ${y3}`,
       `L ${x4} ${y4}`,
-      `A ${innerRadius} ${innerRadius} 0 ${largeArcFlag} 0 ${x1} ${y1}`,
+      `A ${level1InnerRadius} ${level1InnerRadius} 0 ${largeArcFlag} 0 ${x1} ${y1}`,
       'Z'
     ].join(' ');
 
     const isHovered = hoveredEmotion === emotion.id;
     const isSelected = selectedEmotion?.id === emotion.id;
     
-    const textRadius = (innerRadius + outerRadius) / 2;
+    const textRadius = (level1InnerRadius + level1OuterRadius) / 2;
     const textAngle = startAngle + (segmentAngle / 2);
     const textAngleRad = (textAngle * Math.PI) / 180;
     const textX = centerX + textRadius * Math.cos(textAngleRad);
@@ -59,8 +68,11 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({ language }) => {
       textRotation = textAngle + 180;
     }
     
+    const emotionName = getEmotionName(emotion, language as Language);
+    const fontSize = Math.min(22, Math.max(18, 600 / emotionName.length));
+    
     return (
-      <g key={emotion.id}>
+      <g key={emotion.id} className="emotion-segment">
         <path
           d={pathData}
           fill={emotion.color}
@@ -78,7 +90,7 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({ language }) => {
           textAnchor="middle"
           dominantBaseline="middle"
           fill="black"
-          fontSize="14"
+          fontSize={fontSize}
           fontWeight="700"
           className="pointer-events-none font-inter"
           style={{ 
@@ -86,15 +98,13 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({ language }) => {
           }}
           transform={`rotate(${textRotation} ${textX} ${textY})`}
         >
-          {getEmotionName(emotion, language as 'en' | 'te')}
+          {emotionName}
         </text>
       </g>
     );
   };
 
   const createLevel2Segments = (primaryEmotion: EmotionLevel1, primaryIndex: number, totalPrimary: number) => {
-    const centerX = 350;
-    const centerY = 350;
     const primarySegmentAngle = 360 / totalPrimary;
     const primaryStartAngle = primaryIndex * primarySegmentAngle;
     
@@ -109,31 +119,28 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({ language }) => {
       const startAngleRad = (startAngle * Math.PI) / 180;
       const endAngleRad = (endAngle * Math.PI) / 180;
       
-      const innerRadius = 140;
-      const outerRadius = 210;
+      const x1 = centerX + level2InnerRadius * Math.cos(startAngleRad);
+      const y1 = centerY + level2InnerRadius * Math.sin(startAngleRad);
+      const x2 = centerX + level2OuterRadius * Math.cos(startAngleRad);
+      const y2 = centerY + level2OuterRadius * Math.sin(startAngleRad);
       
-      const x1 = centerX + innerRadius * Math.cos(startAngleRad);
-      const y1 = centerY + innerRadius * Math.sin(startAngleRad);
-      const x2 = centerX + outerRadius * Math.cos(startAngleRad);
-      const y2 = centerY + outerRadius * Math.sin(startAngleRad);
-      
-      const x3 = centerX + outerRadius * Math.cos(endAngleRad);
-      const y3 = centerY + outerRadius * Math.sin(endAngleRad);
-      const x4 = centerX + innerRadius * Math.cos(endAngleRad);
-      const y4 = centerY + innerRadius * Math.sin(endAngleRad);
+      const x3 = centerX + level2OuterRadius * Math.cos(endAngleRad);
+      const y3 = centerY + level2OuterRadius * Math.sin(endAngleRad);
+      const x4 = centerX + level2InnerRadius * Math.cos(endAngleRad);
+      const y4 = centerY + level2InnerRadius * Math.sin(endAngleRad);
       
       const largeArcFlag = level2SegmentAngle > 180 ? 1 : 0;
       
       const pathData = [
         `M ${x1} ${y1}`,
         `L ${x2} ${y2}`,
-        `A ${outerRadius} ${outerRadius} 0 ${largeArcFlag} 1 ${x3} ${y3}`,
+        `A ${level2OuterRadius} ${level2OuterRadius} 0 ${largeArcFlag} 1 ${x3} ${y3}`,
         `L ${x4} ${y4}`,
-        `A ${innerRadius} ${innerRadius} 0 ${largeArcFlag} 0 ${x1} ${y1}`,
+        `A ${level2InnerRadius} ${level2InnerRadius} 0 ${largeArcFlag} 0 ${x1} ${y1}`,
         'Z'
       ].join(' ');
 
-      const textRadius = (innerRadius + outerRadius) / 2;
+      const textRadius = (level2InnerRadius + level2OuterRadius) / 2;
       const textAngle = startAngle + (level2SegmentAngle / 2);
       const textAngleRad = (textAngle * Math.PI) / 180;
       const textX = centerX + textRadius * Math.cos(textAngleRad);
@@ -143,15 +150,19 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({ language }) => {
       if (textAngle > 90 && textAngle < 270) {
         textRotation = textAngle + 180;
       }
+
+      const emotionName = getEmotionName(emotion, language as Language);
+      // Adaptive font size based on text length and segment size
+      const fontSize = Math.min(18, Math.max(11, 350 / emotionName.length));
       
       return (
-        <g key={`${primaryEmotion.id}-${emotion.id}`}>
+        <g key={`${primaryEmotion.id}-${emotion.id}`} className="emotion-segment">
           <path
             d={pathData}
             fill={primaryEmotion.color}
             fillOpacity={0.7}
             stroke="white"
-            strokeWidth="1"
+            strokeWidth="1.5"
             className="cursor-pointer"
           />
           <text
@@ -160,7 +171,7 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({ language }) => {
             textAnchor="middle"
             dominantBaseline="middle"
             fill="black"
-            fontSize="11"
+            fontSize={fontSize}
             fontWeight="600"
             className="pointer-events-none font-inter"
             style={{ 
@@ -168,7 +179,7 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({ language }) => {
             }}
             transform={`rotate(${textRotation} ${textX} ${textY})`}
           >
-            {getEmotionName(emotion, language as 'en' | 'te')}
+            {emotionName}
           </text>
         </g>
       );
@@ -176,8 +187,6 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({ language }) => {
   };
 
   const createLevel3Segments = (primaryEmotion: EmotionLevel1, primaryIndex: number, totalPrimary: number) => {
-    const centerX = 350;
-    const centerY = 350;
     const primarySegmentAngle = 360 / totalPrimary;
     const primaryStartAngle = primaryIndex * primarySegmentAngle;
     
@@ -200,31 +209,28 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({ language }) => {
         const startAngleRad = (startAngle * Math.PI) / 180;
         const endAngleRad = (endAngle * Math.PI) / 180;
         
-        const innerRadius = 210;
-        const outerRadius = 280;
+        const x1 = centerX + level3InnerRadius * Math.cos(startAngleRad);
+        const y1 = centerY + level3InnerRadius * Math.sin(startAngleRad);
+        const x2 = centerX + level3OuterRadius * Math.cos(startAngleRad);
+        const y2 = centerY + level3OuterRadius * Math.sin(startAngleRad);
         
-        const x1 = centerX + innerRadius * Math.cos(startAngleRad);
-        const y1 = centerY + innerRadius * Math.sin(startAngleRad);
-        const x2 = centerX + outerRadius * Math.cos(startAngleRad);
-        const y2 = centerY + outerRadius * Math.sin(startAngleRad);
-        
-        const x3 = centerX + outerRadius * Math.cos(endAngleRad);
-        const y3 = centerY + outerRadius * Math.sin(endAngleRad);
-        const x4 = centerX + innerRadius * Math.cos(endAngleRad);
-        const y4 = centerY + innerRadius * Math.sin(endAngleRad);
+        const x3 = centerX + level3OuterRadius * Math.cos(endAngleRad);
+        const y3 = centerY + level3OuterRadius * Math.sin(endAngleRad);
+        const x4 = centerX + level3InnerRadius * Math.cos(endAngleRad);
+        const y4 = centerY + level3InnerRadius * Math.sin(endAngleRad);
         
         const largeArcFlag = level3SegmentAngle > 180 ? 1 : 0;
         
         const pathData = [
           `M ${x1} ${y1}`,
           `L ${x2} ${y2}`,
-          `A ${outerRadius} ${outerRadius} 0 ${largeArcFlag} 1 ${x3} ${y3}`,
+          `A ${level3OuterRadius} ${level3OuterRadius} 0 ${largeArcFlag} 1 ${x3} ${y3}`,
           `L ${x4} ${y4}`,
-          `A ${innerRadius} ${innerRadius} 0 ${largeArcFlag} 0 ${x1} ${y1}`,
+          `A ${level3InnerRadius} ${level3InnerRadius} 0 ${largeArcFlag} 0 ${x1} ${y1}`,
           'Z'
         ].join(' ');
 
-        const textRadius = (innerRadius + outerRadius) / 2;
+        const textRadius = (level3InnerRadius + level3OuterRadius) / 2;
         const textAngle = startAngle + (level3SegmentAngle / 2);
         const textAngleRad = (textAngle * Math.PI) / 180;
         const textX = centerX + textRadius * Math.cos(textAngleRad);
@@ -234,9 +240,13 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({ language }) => {
         if (textAngle > 90 && textAngle < 270) {
           textRotation = textAngle + 180;
         }
+
+        const emotionName = getEmotionName(emotion, language as Language);
+        // Adaptive font size based on text length
+        const fontSize = Math.min(14, Math.max(9, 200 / emotionName.length));
         
         allLevel3Segments.push(
-          <g key={`${primaryEmotion.id}-${level2Emotion.id}-${emotion.id}`}>
+          <g key={`${primaryEmotion.id}-${level2Emotion.id}-${emotion.id}`} className="emotion-segment">
             <path
               d={pathData}
               fill={primaryEmotion.color}
@@ -251,7 +261,7 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({ language }) => {
               textAnchor="middle"
               dominantBaseline="middle"
               fill="black"
-              fontSize="9"
+              fontSize={fontSize}
               fontWeight="500"
               className="pointer-events-none font-inter"
               style={{ 
@@ -259,7 +269,7 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({ language }) => {
               }}
               transform={`rotate(${textRotation} ${textX} ${textY})`}
             >
-              {getEmotionName(emotion, language as 'en' | 'te')}
+              {emotionName}
             </text>
           </g>
         );
@@ -272,7 +282,7 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({ language }) => {
   return (
     <div className="flex flex-col items-center space-y-8">
       <div className="relative">
-        <svg width="700" height="700" viewBox="0 0 700 700" className="w-full max-w-4xl">
+        <svg width={svgSize} height={svgSize} viewBox={`0 0 ${svgSize} ${svgSize}`} className="w-full max-w-6xl">
           {/* Level 3 segments (outermost) */}
           {emotionsData.map((emotion, index) => createLevel3Segments(emotion, index, emotionsData.length))}
           
@@ -284,9 +294,9 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({ language }) => {
           
           {/* Center circle */}
           <circle
-            cx="350"
-            cy="350"
-            r="70"
+            cx={centerX}
+            cy={centerY}
+            r={innerRadius}
             fill="url(#centerGradient)"
             stroke="white"
             strokeWidth="3"
@@ -300,16 +310,16 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({ language }) => {
           </defs>
           
           <text
-            x="350"
-            y="350"
+            x={centerX}
+            y={centerY}
             textAnchor="middle"
             dominantBaseline="middle"
             fill="#333"
-            fontSize="18"
+            fontSize="24"
             fontWeight="700"
             className="font-playfair"
           >
-            {language === 'en' ? 'Emotions' : 'భావనలు'}
+            {getEmotionName({ id: 'main.emotions' }, language as Language)}
           </text>
         </svg>
       </div>
@@ -318,18 +328,19 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({ language }) => {
       {selectedEmotion && (
         <div className="bg-card border border-border rounded-lg p-6 w-full max-w-md mx-auto animate-fade-in">
           <h3 className="text-xl font-playfair font-semibold mb-4 text-center">
-            {getEmotionName(selectedEmotion, language as 'en' | 'te')}
+            {getEmotionName(selectedEmotion, language as Language)}
           </h3>
           
           <div className="space-y-3">
             <div>
               <h4 className="font-semibold text-sm text-muted-foreground mb-2">
-                {language === 'en' ? 'Secondary Emotions:' : 'ద్వితీయ భావనలు:'}
+                {language === 'en' ? 'Secondary Emotions:' : language === 'te' ? 'ద్వితీయ భావనలు:' : 
+                 language === 'es' ? 'Emociones Secundarias:' : 'இரண்டாம் நிலை உணர்ச்சிகள்:'}
               </h4>
               <div className="grid grid-cols-2 gap-1 text-sm">
                 {getAllLevel2Emotions(selectedEmotion).map((emotion) => (
                   <span key={emotion.id} className="text-xs bg-accent/20 rounded px-2 py-1">
-                    {getEmotionName(emotion, language as 'en' | 'te')}
+                    {getEmotionName(emotion, language as Language)}
                   </span>
                 ))}
               </div>
@@ -337,12 +348,13 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({ language }) => {
             
             <div>
               <h4 className="font-semibold text-sm text-muted-foreground mb-2">
-                {language === 'en' ? 'Detailed Emotions:' : 'వివరణాత్మక భావనలు:'}
+                {language === 'en' ? 'Detailed Emotions:' : language === 'te' ? 'వివరణాత్మక భావనలు:' : 
+                 language === 'es' ? 'Emociones Detalladas:' : 'விரிவான உணர்ச்சிகள்:'}
               </h4>
               <div className="grid grid-cols-2 gap-1 text-sm">
                 {getAllLevel3Emotions(selectedEmotion).map((emotion) => (
                   <span key={emotion.id} className="text-xs bg-primary/10 rounded px-2 py-1">
-                    {getEmotionName(emotion, language as 'en' | 'te')}
+                    {getEmotionName(emotion, language as Language)}
                   </span>
                 ))}
               </div>
@@ -352,10 +364,7 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({ language }) => {
       )}
       
       <p className="text-sm text-muted-foreground text-center max-w-md">
-        {language === 'en' 
-          ? 'Click on any emotion segment to explore its related feelings and understand the emotional hierarchy.'
-          : 'ఏదైనా భావోద్వేగ విభాగంపై క్లిక్ చేసి దాని సంబంధిత భావాలను అన్వేషించండి మరియు భావోద్వేగ క్రమబద్ధతను అర్థం చేసుకోండి.'
-        }
+        {getEmotionName({ id: 'main.clickExplore' }, language as Language)}
       </p>
     </div>
   );
