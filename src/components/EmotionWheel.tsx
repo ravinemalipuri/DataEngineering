@@ -1,6 +1,7 @@
+
 import React, { useState } from 'react';
 import { getEmotionsData, getAllLevel2Emotions, getAllLevel3Emotions, EmotionLevel1, EmotionLevel2, EmotionLevel3, getEmotionName as getEmotionNameFromData } from '@/data/emotions';
-import { getEmotionName } from '@/translations';
+import { getEmotionName, getTranslation } from '@/translations';
 import { Language } from '@/translations';
 
 interface EmotionWheelProps {
