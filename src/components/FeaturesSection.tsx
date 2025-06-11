@@ -2,6 +2,7 @@
 import React from 'react';
 import EmotionWheel from './EmotionWheel';
 import EmotionWheelFullscreen from './EmotionWheelFullscreen';
+import HowToUseGuide from './HowToUseGuide';
 import { Language, getTranslation } from '@/translations';
 
 interface FeaturesSectionProps {
@@ -30,8 +31,11 @@ const FeaturesSection: React.FC<FeaturesSectionProps> = ({ language }) => {
           </div>
         </div>
 
+        {/* How to Use Guide */}
+        <HowToUseGuide language={language as Language} />
+
         {/* Understanding the Wheel */}
-        <div className="mt-16 bg-card rounded-xl p-8 border border-border">
+        <div className="bg-card rounded-xl p-8 border border-border">
           <h3 className="text-xl font-playfair font-semibold mb-6 text-center">
             {getTranslation('main.understandingWheel', language as Language)}
           </h3>

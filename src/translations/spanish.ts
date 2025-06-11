@@ -24,7 +24,28 @@ export const spanishTranslations = {
     viewFullscreen: "Ver en Pantalla Completa",
     fullscreenView: "Rueda Interactiva de Emociones - Vista de Pantalla Completa",
     enhancedFullscreen: "Vista mejorada de pantalla completa para mejor exploración y comprensión emocional",
-    clickExplore: "Haz clic en cualquier segmento de emoción para explorar sus sentimientos relacionados y entender la jerarquía emocional."
+    clickExplore: "Haz clic en cualquier segmento de emoción para explorar sus sentimientos relacionados y entender la jerarquía emocional.",
+    
+    // How to use guide
+    howToUse: "Cómo Usar la Rueda de Emociones",
+    howToUseIntro: "Entender cómo se siente realmente alguien—ya sea tu hijo, pareja o familiar—puede ser desafiante. La rueda de emociones es una herramienta útil que te permite mirar más allá de las reacciones superficiales y descubrir las emociones más profundas detrás de ellas.",
+    howToUseSteps: "Comienza identificando la emoción primaria que se expresa, como ira, tristeza o alegría. Luego, mira más de cerca: la mayoría de las emociones primarias son desencadenadas por una o más emociones terciarias—sentimientos más específicos como frustración, culpa o esperanza.",
+    howToUseConversation: "Usa la rueda para guiar una conversación u observación. Haz preguntas gentiles, o reflexiona sobre comportamientos, para pasar de la emoción obvia a la causa raíz. Por ejemplo, un niño que muestra ira podría realmente sentirse rechazado o avergonzado.",
+    howToUsePurpose: "Esta herramienta no es solo para etiquetar sentimientos—es una forma de construir empatía, conexión y conciencia emocional en tus relaciones.",
+    
+    // Examples
+    examples: "Ejemplos",
+    example1Title: "Para un Niño (Edad Escolar)",
+    example1Text: "Tu hijo llega a casa de la escuela y dice: \"¡Odio la escuela!\" Eso suena como ira, pero usando la rueda de emociones, podrías explorar más profundo. Tal vez se sintió excluido en el recreo o avergonzado después de dar una respuesta incorrecta en clase. Lo que realmente está sintiendo podría ser dolor o vergüenza—no solo ira.",
+    example1Question: "\"¿Pasó algo hoy que te hizo sentir excluido?\"",
+    example1Using: "Usar la rueda te ayuda a hacer las preguntas correctas, como:",
+    
+    example2Title: "Para un Adulto Mayor (Como un Abuelo)",
+    example2Text: "Tu abuelo parece malhumorado o retraído y dice: \"Nadie me visita nunca.\" Podría sonar como ira o amargura, pero mira más profundo—tal vez se siente solo, olvidado, o incluso temeroso de perder conexión.",
+    example2Response: "\"¿Te sientes un poco solo hoy? ¿Quieres hablar o dar un paseo?\"",
+    example2Try: "Intenta responder con:",
+    
+    exampleConclusion: "Esto ayuda a cambiar el enfoque de la reacción a la emoción real—y abre espacio para el cuidado y la conexión."
   },
 
   // Emotions
