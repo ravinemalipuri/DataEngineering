@@ -12,9 +12,9 @@ interface FeaturesSectionProps {
 
 const FeaturesSection: React.FC<FeaturesSectionProps> = ({ language }) => {
   return (
-    <section id="features" className="py-20 bg-background">
+    <section id="features" className="py-12 bg-background">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
+        <div className="text-center mb-8">
           <h2 className="text-3xl md:text-4xl font-playfair font-bold mb-6">
             {getTranslation('main.interactiveEmotionWheel', language as Language)}
           </h2>
@@ -23,7 +23,7 @@ const FeaturesSection: React.FC<FeaturesSectionProps> = ({ language }) => {
           </p>
         </div>
 
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-6xl mx-auto mb-8">
           <EmotionWheel language={language} />
           
           {/* Fullscreen Button */}
