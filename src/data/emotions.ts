@@ -20,7 +20,7 @@ export interface EmotionLevel3 extends Emotion {
   intensity: 'tertiary';
 }
 
-export const emotionsData: Emotion[] = [
+const emotionsDataArray: Emotion[] = [
   // Primary emotions (inner circle)
   { id: 'joy', name: 'Joy', color: '#FFD700', intensity: 'primary', category: 'positive' },
   { id: 'trust', name: 'Trust', color: '#87CEEB', intensity: 'primary', category: 'positive' },
@@ -32,14 +32,14 @@ export const emotionsData: Emotion[] = [
   { id: 'anticipation', name: 'Anticipation', color: '#FF8C00', intensity: 'primary', category: 'positive' },
 ];
 
-export const getEmotionsData = () => emotionsData;
+export const emotionsData = () => emotionsDataArray;
 
 export const getAllLevel2Emotions = (): EmotionLevel2[] => {
-  return emotionsData.filter(emotion => emotion.intensity === 'secondary') as EmotionLevel2[];
+  return emotionsDataArray.filter(emotion => emotion.intensity === 'secondary') as EmotionLevel2[];
 };
 
 export const getAllLevel3Emotions = (): EmotionLevel3[] => {
-  return emotionsData.filter(emotion => emotion.intensity === 'tertiary') as EmotionLevel3[];
+  return emotionsDataArray.filter(emotion => emotion.intensity === 'tertiary') as EmotionLevel3[];
 };
 
 export const getEmotionName = (emotion: any, language: string): string => {
