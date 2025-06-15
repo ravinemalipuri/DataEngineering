@@ -25,12 +25,18 @@ export const defaultMediaLinks: MediaLink[] = [
     title: 'Emotion Wheel Guide Video 3', 
     url: 'https://www.youtube.com/watch?v=skZagPiKQfQ',
     type: 'youtube'
+  },
+  {
+    id: '4',
+    title: 'Short Emotional Intelligence Tips',
+    url: 'https://www.youtube.com/shorts/_x-20u08cro',
+    type: 'youtube'
   }
 ];
 
 // Helper function to extract YouTube video ID from URL
 export const getYouTubeVideoId = (url: string): string | null => {
-  const regex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
+  const regex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/|youtube\.com\/shorts\/)([^"&?\/\s]{11})/;
   const match = url.match(regex);
   return match ? match[1] : null;
 };
