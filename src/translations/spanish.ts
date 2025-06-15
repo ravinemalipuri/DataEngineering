@@ -1,29 +1,29 @@
 
 export const spanishTranslations = {
   nav: {
+    emotionWheel: "Rueda de Emociones",
     home: "Inicio",
-    features: "Características",
     about: "Acerca de",
-    contact: "Contacto",
-    languageSelector: "Idioma"
+    features: "Características", 
+    contact: "Contacto"
   },
   main: {
     interactiveEmotionWheel: "Rueda Interactiva de Emociones",
-    exploreSpectrum: "Explora todo el espectro de emociones humanas a través de nuestra rueda interactiva",
-    viewFullscreen: "Ver Pantalla Completa",
-    fullscreenView: "Rueda de Emociones en Pantalla Completa",
-    enhancedFullscreen: "Experiencia mejorada en pantalla completa para una mejor exploración emocional",
+    exploreSpectrum: "Explora el espectro completo de emociones humanas",
+    viewFullscreen: "Ver en pantalla completa",
+    fullscreenView: "Vista de pantalla completa",
+    enhancedFullscreen: "Experiencia mejorada en pantalla completa",
     understandingWheel: "Entendiendo la Rueda",
     primaryEmotions: "Emociones Primarias",
-    coreEmotionsInner: "Emociones centrales en el círculo interior",
-    secondaryEmotions: "Emociones Secundarias",
-    emotionCategoriesMiddle: "Categorías de emociones en el anillo medio",
+    coreEmotionsInner: "Emociones básicas en el círculo interior",
+    secondaryEmotions: "Emociones Secundarias", 
+    emotionCategoriesMiddle: "Categorías de emociones en el círculo medio",
     detailedEmotions: "Emociones Detalladas",
-    specificFeelingsOuter: "Sentimientos específicos en el anillo exterior"
+    specificFeelingsOuter: "Sentimientos específicos en el círculo exterior"
   },
   emotions: {
     joy: "Alegría",
-    trust: "Confianza",
+    trust: "Confianza", 
     fear: "Miedo",
     surprise: "Sorpresa",
     sadness: "Tristeza",

@@ -1,30 +1,30 @@
 
 export const englishTranslations = {
   nav: {
+    emotionWheel: "Emotion Wheel",
     home: "Home",
+    about: "About", 
     features: "Features",
-    about: "About",
-    contact: "Contact",
-    languageSelector: "Language"
+    contact: "Contact"
   },
   main: {
     interactiveEmotionWheel: "Interactive Emotion Wheel",
-    exploreSpectrum: "Explore the full spectrum of human emotions through our interactive wheel",
+    exploreSpectrum: "Explore the full spectrum of human emotions",
     viewFullscreen: "View Fullscreen",
-    fullscreenView: "Fullscreen Emotion Wheel",
-    enhancedFullscreen: "Enhanced fullscreen experience for better emotion exploration",
+    fullscreenView: "Fullscreen View", 
+    enhancedFullscreen: "Enhanced fullscreen experience",
     understandingWheel: "Understanding the Wheel",
     primaryEmotions: "Primary Emotions",
     coreEmotionsInner: "Core emotions in the inner circle",
     secondaryEmotions: "Secondary Emotions",
-    emotionCategoriesMiddle: "Emotion categories in the middle ring",
+    emotionCategoriesMiddle: "Emotion categories in the middle circle", 
     detailedEmotions: "Detailed Emotions",
-    specificFeelingsOuter: "Specific feelings in the outer ring"
+    specificFeelingsOuter: "Specific feelings in the outer circle"
   },
   emotions: {
     joy: "Joy",
     trust: "Trust",
-    fear: "Fear",
+    fear: "Fear", 
     surprise: "Surprise",
     sadness: "Sadness",
     disgust: "Disgust",
