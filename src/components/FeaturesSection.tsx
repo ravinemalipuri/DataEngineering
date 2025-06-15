@@ -3,6 +3,7 @@ import React from 'react';
 import EmotionWheel from './EmotionWheel';
 import EmotionWheelFullscreen from './EmotionWheelFullscreen';
 import HowToUseGuide from './HowToUseGuide';
+import MediaBar from './MediaBar';
 import { Language, getTranslation } from '@/translations';
 
 interface FeaturesSectionProps {
@@ -73,6 +74,9 @@ const FeaturesSection: React.FC<FeaturesSectionProps> = ({ language }) => {
           </div>
         </div>
       </div>
+      
+      {/* Media Bar at the bottom */}
+      <MediaBar />
     </section>
   );
 };

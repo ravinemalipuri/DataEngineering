@@ -182,7 +182,7 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({ language }) => {
           <path
             d={pathData}
             fill={primaryEmotion.color}
-            fillOpacity={0.7}
+            fillOpacity={0.75}
             stroke="white"
             strokeWidth="1.5"
             className="cursor-pointer"
@@ -194,10 +194,10 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({ language }) => {
             dominantBaseline="middle"
             fill="black"
             fontSize={fontSize}
-            fontWeight="600"
+            fontWeight="700"
             className="pointer-events-none font-inter"
             style={{ 
-              textShadow: '1px 1px 2px rgba(255,255,255,0.9), -1px -1px 2px rgba(255,255,255,0.9), 1px -1px 2px rgba(255,255,255,0.9), -1px 1px 2px rgba(255,255,255,0.9)' 
+              textShadow: '2px 2px 4px rgba(255,255,255,0.9), -2px -2px 4px rgba(255,255,255,0.9), 2px -2px 4px rgba(255,255,255,0.9), -2px 2px 4px rgba(255,255,255,0.9)' 
             }}
             transform={`rotate(${textRotation} ${textX} ${textY})`}
           >
@@ -264,14 +264,14 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({ language }) => {
         }
 
         const emotionName = getEmotionDisplayName(emotion);
-        const fontSize = getFontSize(emotionName, 14, 3);
+        const fontSize = getFontSize(emotionName, 16, 3);
         
         allLevel3Segments.push(
           <g key={`${primaryEmotion.id}-${level2Emotion.id}-${emotion.id}`} className="emotion-segment">
             <path
               d={pathData}
               fill={primaryEmotion.color}
-              fillOpacity={0.4}
+              fillOpacity={0.55}
               stroke="white"
               strokeWidth="1"
               className="cursor-pointer"
@@ -283,10 +283,10 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({ language }) => {
               dominantBaseline="middle"
               fill="black"
               fontSize={fontSize}
-              fontWeight="500"
+              fontWeight="800"
               className="pointer-events-none font-inter"
               style={{ 
-                textShadow: '1px 1px 2px rgba(255,255,255,0.9), -1px -1px 2px rgba(255,255,255,0.9), 1px -1px 2px rgba(255,255,255,0.9), -1px 1px 2px rgba(255,255,255,0.9)' 
+                textShadow: '3px 3px 6px rgba(255,255,255,0.95), -3px -3px 6px rgba(255,255,255,0.95), 3px -3px 6px rgba(255,255,255,0.95), -3px 3px 6px rgba(255,255,255,0.95)' 
               }}
               transform={`rotate(${textRotation} ${textX} ${textY})`}
             >
