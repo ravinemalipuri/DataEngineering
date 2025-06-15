@@ -11,6 +11,13 @@ export const translations = {
   ta: englishTranslations, // Fallback to English for now
 };
 
+export const languageNames = {
+  en: "English",
+  te: "తెలుగు",
+  es: "Español", 
+  ta: "தமிழ்"
+};
+
 export const getTranslation = (key: string, language: Language = 'en'): string => {
   const keys = key.split('.');
   let value: any = translations[language] || translations.en;
@@ -21,4 +28,15 @@ export const getTranslation = (key: string, language: Language = 'en'): string =
   }
   
   return value || key;
+};
+
+export const getEmotionName = (emotion: any, language: Language): string => {
+  if (!emotion) return '';
+  
+  if (emotion.id) {
+    const translatedName = translations[language].emotions?.[emotion.id];
+    if (translatedName) return translatedName;
+  }
+  
+  return emotion.name || '???';
 };
