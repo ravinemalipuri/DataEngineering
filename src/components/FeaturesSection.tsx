@@ -1,9 +1,9 @@
-
 import React from 'react';
 import EmotionWheel from './EmotionWheel';
 import EmotionWheelFullscreen from './EmotionWheelFullscreen';
 import HowToUseGuide from './HowToUseGuide';
 import MediaBar from './MediaBar';
+import FeelingsJournal from "./FeelingsJournal";
 import { Language, getTranslation } from '@/translations';
 
 interface FeaturesSectionProps {
@@ -77,6 +77,9 @@ const FeaturesSection: React.FC<FeaturesSectionProps> = ({ language }) => {
       
       {/* Media Bar at the bottom */}
       <MediaBar />
+
+      {/* Feelings Journal */}
+      <FeelingsJournal />
     </section>
   );
 };
