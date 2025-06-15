@@ -1,48 +1,56 @@
 
-export interface Emotion {
-  id: string;
-  name: string;
-  color: string;
-  intensity: 'primary' | 'secondary' | 'tertiary';
-  category: string;
-  description?: string;
-}
+import { emotionsDataEnglish, EmotionLevel1 as EmotionLevel1English, EmotionLevel2 as EmotionLevel2English, EmotionLevel3 as EmotionLevel3English } from './emotions_english';
+import { emotionsDataTelugu, EmotionLevel1Telugu, EmotionLevel2Telugu, EmotionLevel3Telugu } from './emotions_telugu';
+import { emotionsDataSpanish, EmotionLevel1Spanish, EmotionLevel2Spanish, EmotionLevel3Spanish } from './emotions_spanish';
+import { emotionsDataTamil, EmotionLevel1Tamil, EmotionLevel2Tamil, EmotionLevel3Tamil } from './emotions_tamil';
+import { Language } from '@/translations';
 
-export interface EmotionLevel1 extends Emotion {
-  intensity: 'primary';
-}
+// Union types for all emotion levels
+export type EmotionLevel3 = EmotionLevel3English | EmotionLevel3Telugu | EmotionLevel3Spanish | EmotionLevel3Tamil;
+export type EmotionLevel2 = EmotionLevel2English | EmotionLevel2Telugu | EmotionLevel2Spanish | EmotionLevel2Tamil;
+export type EmotionLevel1 = EmotionLevel1English | EmotionLevel1Telugu | EmotionLevel1Spanish | EmotionLevel1Tamil;
 
-export interface EmotionLevel2 extends Emotion {
-  intensity: 'secondary';
-}
-
-export interface EmotionLevel3 extends Emotion {
-  intensity: 'tertiary';
-}
-
-const emotionsDataArray: Emotion[] = [
-  // Primary emotions (inner circle)
-  { id: 'joy', name: 'Joy', color: '#FFD700', intensity: 'primary', category: 'positive' },
-  { id: 'trust', name: 'Trust', color: '#87CEEB', intensity: 'primary', category: 'positive' },
-  { id: 'fear', name: 'Fear', color: '#9370DB', intensity: 'primary', category: 'negative' },
-  { id: 'surprise', name: 'Surprise', color: '#FF6347', intensity: 'primary', category: 'neutral' },
-  { id: 'sadness', name: 'Sadness', color: '#4682B4', intensity: 'primary', category: 'negative' },
-  { id: 'disgust', name: 'Disgust', color: '#9ACD32', intensity: 'primary', category: 'negative' },
-  { id: 'anger', name: 'Anger', color: '#DC143C', intensity: 'primary', category: 'negative' },
-  { id: 'anticipation', name: 'Anticipation', color: '#FF8C00', intensity: 'primary', category: 'positive' },
-];
-
-export const emotionsData = () => emotionsDataArray;
-
-export const getAllLevel2Emotions = (): EmotionLevel2[] => {
-  return emotionsDataArray.filter(emotion => emotion.intensity === 'secondary') as EmotionLevel2[];
+// Function to get emotions data based on language
+export const getEmotionsData = (language: Language): EmotionLevel1[] => {
+  switch (language) {
+    case 'en':
+      return emotionsDataEnglish as EmotionLevel1[];
+    case 'te':
+      return emotionsDataTelugu as EmotionLevel1[];
+    case 'es':
+      return emotionsDataSpanish as EmotionLevel1[];
+    case 'ta':
+      return emotionsDataTamil as EmotionLevel1[];
+    default:
+      return emotionsDataEnglish as EmotionLevel1[];
+  }
 };
 
-export const getAllLevel3Emotions = (): EmotionLevel3[] => {
-  return emotionsDataArray.filter(emotion => emotion.intensity === 'tertiary') as EmotionLevel3[];
-};
+// Default export for backward compatibility
+export const emotionsData = emotionsDataEnglish as EmotionLevel1[];
 
-export const getEmotionName = (emotion: any, language: string): string => {
+// Helper function to get emotion name based on language
+export const getEmotionName = (emotion: any, language: Language): string => {
   if (!emotion) return '';
-  return emotion.name || '???';
+  
+  switch (language) {
+    case 'en':
+      return emotion.nameEnglish || emotion.name || '???';
+    case 'te':
+      return emotion.nameTelugu || emotion.name || '???';
+    case 'es':
+      return emotion.nameSpanish || emotion.name || '???';
+    case 'ta':
+      return emotion.nameTamil || emotion.name || '???';
+    default:
+      return emotion.nameEnglish || emotion.name || '???';
+  }
+};
+
+export const getAllLevel3Emotions = (primaryEmotion: EmotionLevel1): EmotionLevel3[] => {
+  return primaryEmotion.level2Emotions.flatMap(level2 => level2.level3Emotions);
+};
+
+export const getAllLevel2Emotions = (primaryEmotion: EmotionLevel1): EmotionLevel2[] => {
+  return primaryEmotion.level2Emotions;
 };
