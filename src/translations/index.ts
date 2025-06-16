@@ -45,6 +45,12 @@ export type TranslationKeys = {
     example2Try: string;
     exampleConclusion: string;
   };
+  journal: {
+    feelingJournal: string;
+    addEntry: string;
+    previousEntries: string;
+    noEntries: string;
+  };
   emotions: Record<string, string>;
 };
 

@@ -1,4 +1,3 @@
-
 export const spanishTranslations = {
   // Navigation
   nav: {
@@ -46,6 +45,14 @@ export const spanishTranslations = {
     example2Try: "Intenta responder con:",
     
     exampleConclusion: "Esto ayuda a cambiar el enfoque de la reacción a la emoción real—y abre espacio para el cuidado y la conexión."
+  },
+
+  // Journal
+  journal: {
+    feelingJournal: "Diario de Sentimientos",
+    addEntry: "Agregar Entrada",
+    previousEntries: "Entradas Anteriores",
+    noEntries: "Aún no hay entradas para este sentimiento"
   },
 
   // Emotions

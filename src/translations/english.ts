@@ -1,4 +1,3 @@
-
 export const englishTranslations = {
   // Navigation
   nav: {
@@ -48,7 +47,14 @@ export const englishTranslations = {
     exampleConclusion: "This helps shift the focus from reaction to real emotion—and opens space for care and connection."
   },
 
-  // Emotions
+  // Journal
+  journal: {
+    feelingJournal: "Feeling Journal",
+    addEntry: "Add Entry",
+    previousEntries: "Previous Entries",
+    noEntries: "No entries yet for this feeling"
+  },
+
   emotions: {
     // Primary emotions
     happy: "Happy",
