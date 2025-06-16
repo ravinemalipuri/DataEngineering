@@ -50,6 +50,30 @@ const FeelingsJournal: React.FC<FeelingsJournalProps> = ({ feeling, language, ch
     localStorage.setItem('feelingsJournalEntries', JSON.stringify(entries));
   }, [entries]);
 
+  const validateLanguageInput = (text: string, lang: Language): boolean => {
+    switch (lang) {
+      case 'te':
+        // Telugu Unicode range
+        return /^[\u0C00-\u0C7F\s.,!?]*$/.test(text);
+      case 'es':
+        // Spanish characters
+        return /^[a-zA-ZáéíóúñüÁÉÍÓÚÑÜ\s.,!?]*$/.test(text);
+      case 'ta':
+        // Tamil Unicode range
+        return /^[\u0B80-\u0BFF\s.,!?]*$/.test(text);
+      default:
+        // English only
+        return /^[a-zA-Z\s.,!?]*$/.test(text);
+    }
+  };
+
+  const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const value = e.target.value;
+    if (validateLanguageInput(value, language)) {
+      setNewComment(value);
+    }
+  };
+
   const handleAddEntry = () => {
     if (newComment.trim()) {
       const newEntry: JournalEntry = {
@@ -83,19 +107,6 @@ const FeelingsJournal: React.FC<FeelingsJournalProps> = ({ feeling, language, ch
     }
   };
 
-  const getLanguagePattern = () => {
-    switch (language) {
-      case 'te':
-        return '[అ-హ\u0C00-\u0C7F\\s.,!?]+'; // Telugu Unicode range
-      case 'es':
-        return '[a-zA-ZáéíóúñüÁÉÍÓÚÑÜ\\s.,!?]+'; // Spanish characters
-      case 'ta':
-        return '[அ-ஹ\u0B80-\u0BFF\\s.,!?]+'; // Tamil Unicode range
-      default:
-        return '[a-zA-Z\\s.,!?]+'; // English only
-    }
-  };
-
   const feelingEntries = getFeelingEntries();
 
   return (
@@ -115,9 +126,8 @@ const FeelingsJournal: React.FC<FeelingsJournalProps> = ({ feeling, language, ch
           <div className="space-y-3">
             <Textarea
               value={newComment}
-              onChange={(e) => setNewComment(e.target.value)}
+              onChange={handleTextChange}
               placeholder={getPlaceholderText()}
-              pattern={getLanguagePattern()}
               className="min-h-[80px] resize-none"
               maxLength={500}
             />

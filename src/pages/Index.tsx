@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import Navigation from '@/components/Navigation';
 import FeaturesSection from '@/components/FeaturesSection';
+import StandaloneFeelingsJournal from '@/components/StandaloneFeelingsJournal';
 import { Language } from '@/translations';
 
 const Index = () => {
@@ -39,6 +40,13 @@ const Index = () => {
       
       <main className="pt-16">
         <FeaturesSection language={currentLanguage} />
+        
+        {/* Standalone Feelings Journal Section */}
+        <section className="py-16 bg-muted/50">
+          <div className="container mx-auto px-4">
+            <StandaloneFeelingsJournal language={currentLanguage} />
+          </div>
+        </section>
       </main>
     </div>
   );
