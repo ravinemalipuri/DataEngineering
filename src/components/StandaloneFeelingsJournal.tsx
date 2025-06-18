@@ -109,26 +109,49 @@ const StandaloneFeelingsJournal: React.FC<StandaloneFeelingsJournalProps> = ({ l
     }
   };
 
-  const getAllEmotions = () => {
+  const getAllEmotionsWithTranslations = () => {
     const emotionsData = getEmotionsData(language);
-    const allEmotions: string[] = [];
+    const allEmotions: Array<{value: string, display: string}> = [];
     
     emotionsData.forEach(level1 => {
       // Add level 1 emotions
-      allEmotions.push(getTranslation(`emotions.${level1.id}`, language));
+      const translatedName = getTranslation(`emotions.${level1.id}`, language);
+      const englishName = getTranslation(`emotions.${level1.id}`, 'en');
+      const displayText = language === 'en' ? englishName : `${translatedName} (${englishName})`;
+      allEmotions.push({
+        value: translatedName,
+        display: displayText
+      });
       
       // Add level 2 emotions
       level1.level2Emotions.forEach(level2 => {
-        allEmotions.push(getTranslation(`emotions.${level2.id}`, language));
+        const translatedName = getTranslation(`emotions.${level2.id}`, language);
+        const englishName = getTranslation(`emotions.${level2.id}`, 'en');
+        const displayText = language === 'en' ? englishName : `${translatedName} (${englishName})`;
+        allEmotions.push({
+          value: translatedName,
+          display: displayText
+        });
         
         // Add level 3 emotions
         level2.level3Emotions.forEach(level3 => {
-          allEmotions.push(getTranslation(`emotions.${level3.id}`, language));
+          const translatedName = getTranslation(`emotions.${level3.id}`, language);
+          const englishName = getTranslation(`emotions.${level3.id}`, 'en');
+          const displayText = language === 'en' ? englishName : `${translatedName} (${englishName})`;
+          allEmotions.push({
+            value: translatedName,
+            display: displayText
+          });
         });
       });
     });
     
-    return [...new Set(allEmotions)].sort();
+    // Remove duplicates and sort
+    const uniqueEmotions = allEmotions.filter((emotion, index, self) => 
+      index === self.findIndex(e => e.value === emotion.value)
+    );
+    
+    return uniqueEmotions.sort((a, b) => a.display.localeCompare(b.display));
   };
 
   const filteredEntries = getFilteredEntries();
@@ -172,9 +195,9 @@ const StandaloneFeelingsJournal: React.FC<StandaloneFeelingsJournalProps> = ({ l
                 } />
               </SelectTrigger>
               <SelectContent>
-                {getAllEmotions().map((emotion) => (
-                  <SelectItem key={emotion} value={emotion}>
-                    {emotion}
+                {getAllEmotionsWithTranslations().map((emotion) => (
+                  <SelectItem key={emotion.value} value={emotion.value}>
+                    {emotion.display}
                   </SelectItem>
                 ))}
               </SelectContent>
