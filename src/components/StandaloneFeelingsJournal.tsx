@@ -54,17 +54,17 @@ const StandaloneFeelingsJournal: React.FC<StandaloneFeelingsJournalProps> = ({ l
   const validateLanguageInput = (text: string, lang: Language): boolean => {
     switch (lang) {
       case 'te':
-        // Telugu Unicode range
-        return /^[\u0C00-\u0C7F\s.,!?]*$/.test(text);
+        // Telugu Unicode range - allow more characters including numbers and common punctuation
+        return /^[\u0C00-\u0C7F\s.,!?0-9a-zA-Z]*$/.test(text);
       case 'es':
         // Spanish characters
-        return /^[a-zA-ZáéíóúñüÁÉÍÓÚÑÜ\s.,!?]*$/.test(text);
+        return /^[a-zA-ZáéíóúñüÁÉÍÓÚÑÜ\s.,!?0-9]*$/.test(text);
       case 'ta':
-        // Tamil Unicode range
-        return /^[\u0B80-\u0BFF\s.,!?]*$/.test(text);
+        // Tamil Unicode range - allow more characters including numbers and common punctuation
+        return /^[\u0B80-\u0BFF\s.,!?0-9a-zA-Z]*$/.test(text);
       default:
         // English only
-        return /^[a-zA-Z\s.,!?]*$/.test(text);
+        return /^[a-zA-Z\s.,!?0-9]*$/.test(text);
     }
   };
 
@@ -117,31 +117,43 @@ const StandaloneFeelingsJournal: React.FC<StandaloneFeelingsJournalProps> = ({ l
       // Add level 1 emotions
       const translatedName = getTranslation(`emotions.${level1.id}`, language);
       const englishName = getTranslation(`emotions.${level1.id}`, 'en');
-      const displayText = language === 'en' ? englishName : `${translatedName} (${englishName})`;
-      allEmotions.push({
-        value: translatedName,
-        display: displayText
-      });
       
-      // Add level 2 emotions
-      level1.level2Emotions.forEach(level2 => {
-        const translatedName = getTranslation(`emotions.${level2.id}`, language);
-        const englishName = getTranslation(`emotions.${level2.id}`, 'en');
+      // Only add if translation exists (not fallback to key)
+      if (translatedName !== `emotions.${level1.id}`) {
         const displayText = language === 'en' ? englishName : `${translatedName} (${englishName})`;
         allEmotions.push({
           value: translatedName,
           display: displayText
         });
+      }
+      
+      // Add level 2 emotions
+      level1.level2Emotions.forEach(level2 => {
+        const translatedName = getTranslation(`emotions.${level2.id}`, language);
+        const englishName = getTranslation(`emotions.${level2.id}`, 'en');
         
-        // Add level 3 emotions
-        level2.level3Emotions.forEach(level3 => {
-          const translatedName = getTranslation(`emotions.${level3.id}`, language);
-          const englishName = getTranslation(`emotions.${level3.id}`, 'en');
+        // Only add if translation exists (not fallback to key)
+        if (translatedName !== `emotions.${level2.id}`) {
           const displayText = language === 'en' ? englishName : `${translatedName} (${englishName})`;
           allEmotions.push({
             value: translatedName,
             display: displayText
           });
+        }
+        
+        // Add level 3 emotions
+        level2.level3Emotions.forEach(level3 => {
+          const translatedName = getTranslation(`emotions.${level3.id}`, language);
+          const englishName = getTranslation(`emotions.${level3.id}`, 'en');
+          
+          // Only add if translation exists (not fallback to key)
+          if (translatedName !== `emotions.${level3.id}`) {
+            const displayText = language === 'en' ? englishName : `${translatedName} (${englishName})`;
+            allEmotions.push({
+              value: translatedName,
+              display: displayText
+            });
+          }
         });
       });
     });
