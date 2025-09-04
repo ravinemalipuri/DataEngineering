@@ -1,0 +1,106 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "title": "employees",
+  "properties": {
+    "id": {
+      "type": "integer",
+      "description": "Integer column",
+      "minimum": 1.0,
+      "maximum": 10.0
+    },
+    "name": {
+      "type": "string",
+      "description": "String column",
+      "minLength": 8,
+      "maxLength": 13,
+      "enum": [
+        "Alice Johnson",
+        "Bob Smith",
+        "Charlie Brown",
+        "Diana Prince",
+        "Eve Wilson",
+        "Frank Miller",
+        "Grace Lee",
+        "Henry Davis",
+        "Ivy Chen",
+        "Jack Taylor"
+      ]
+    },
+    "email": {
+      "type": "string",
+      "description": "String column (appears to contain email addresses)",
+      "minLength": 20,
+      "maxLength": 25,
+      "enum": [
+        "alice.johnson@example.com",
+        "bob.smith@example.com",
+        "charlie.brown@example.com",
+        "diana.prince@example.com",
+        "eve.wilson@example.com",
+        "frank.miller@example.com",
+        "grace.lee@example.com",
+        "henry.davis@example.com",
+        "ivy.chen@example.com",
+        "jack.taylor@example.com"
+      ]
+    },
+    "age": {
+      "type": "integer",
+      "description": "Integer column",
+      "minimum": 26.0,
+      "maximum": 35.0
+    },
+    "salary": {
+      "type": "integer",
+      "description": "Integer column",
+      "minimum": 52000.0,
+      "maximum": 72000.0
+    },
+    "department": {
+      "type": "string",
+      "description": "String column",
+      "minLength": 2,
+      "maxLength": 11,
+      "enum": [
+        "Engineering",
+        "Marketing",
+        "Sales",
+        "HR"
+      ]
+    },
+    "is_active": {
+      "type": "boolean",
+      "description": "Boolean column"
+    },
+    "hire_date": {
+      "type": "string",
+      "description": "String column",
+      "minLength": 10,
+      "maxLength": 10,
+      "enum": [
+        "2022-01-15",
+        "2021-03-22",
+        "2022-07-10",
+        "2020-11-05",
+        "2023-02-14",
+        "2021-09-30",
+        "2022-12-01",
+        "2021-06-18",
+        "2023-04-12",
+        "2022-08-25"
+      ]
+    }
+  },
+  "required": [
+    "id",
+    "name",
+    "email",
+    "age",
+    "salary",
+    "department",
+    "is_active",
+    "hire_date"
+  ],
+  "additionalProperties": false
+}

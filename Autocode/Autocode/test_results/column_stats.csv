@@ -1,0 +1,9 @@
+column_name,data_type,semantic_type,null_count,null_percentage,distinct_count,distinct_percentage,min_value,max_value,mean_value,std_dev,is_outlier_prone
+id,integer,currency,0,0.0,10,100.0,1.0,10.0,5.5,2.8722813232690143,False
+name,string,generic,0,0.0,10,100.0,,,,,False
+email,string,email,0,0.0,10,100.0,,,,,False
+age,integer,currency,0,0.0,10,100.0,26.0,35.0,30.5,2.8722813232690143,False
+salary,integer,currency,0,0.0,10,100.0,52000.0,72000.0,62100.0,6744.627491566899,False
+department,string,generic,0,0.0,4,40.0,,,,,False
+is_active,integer,generic,0,0.0,2,20.0,0.0,1.0,0.7,0.45825756949558405,False
+hire_date,datetime,phone,0,0.0,10,100.0,,,,,False
