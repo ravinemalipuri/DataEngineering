@@ -1,0 +1,173 @@
+-- ====================================================================
+-- Integration Runtime (IR) Usage Metrics DAX Measures
+-- ====================================================================
+-- This file contains DAX measures for analyzing Integration Runtime
+-- usage, including token consumption, cost attribution, and trends
+-- by IR over time.
+-- ====================================================================
+
+-- Total Tokens Used by IR
+TotalTokensByIR = 
+CALCULATE(
+    SUM('FactPipelineRun'[TokensUsed]),
+    ALLSELECTED('DimIntegrationRuntime')
+)
+
+-- Total Cost by IR
+TotalCostByIR = 
+CALCULATE(
+    SUM('FactPipelineRun'[BillingCost]),
+    ALLSELECTED('DimIntegrationRuntime')
+)
+
+-- Total Tokens Used by IR (Last 24 Hours)
+TotalTokensByIR_Last24H = 
+CALCULATE(
+    SUM('FactPipelineRun'[TokensUsed]),
+    'FactPipelineRun'[StartTime] >= NOW() - 1,
+    ALLSELECTED('DimIntegrationRuntime')
+)
+
+-- Total Cost by IR (Last 24 Hours)
+TotalCostByIR_Last24H = 
+CALCULATE(
+    SUM('FactPipelineRun'[BillingCost]),
+    'FactPipelineRun'[StartTime] >= NOW() - 1,
+    ALLSELECTED('DimIntegrationRuntime')
+)
+
+-- Total Tokens Used by IR (Last 7 Days)
+TotalTokensByIR_Last7D = 
+CALCULATE(
+    SUM('FactPipelineRun'[TokensUsed]),
+    'FactPipelineRun'[StartTime] >= TODAY() - 7,
+    ALLSELECTED('DimIntegrationRuntime')
+)
+
+-- Total Cost by IR (Last 7 Days)
+TotalCostByIR_Last7D = 
+CALCULATE(
+    SUM('FactPipelineRun'[BillingCost]),
+    'FactPipelineRun'[StartTime] >= TODAY() - 7,
+    ALLSELECTED('DimIntegrationRuntime')
+)
+
+-- Daily Tokens by IR (for trend analysis)
+DailyTokensByIR = 
+CALCULATE(
+    SUM('FactPipelineRun'[TokensUsed]),
+    ALLSELECTED('FactPipelineRun'[StartTime]),
+    VALUES('DimDate'[Date]),
+    ALLSELECTED('DimIntegrationRuntime')
+)
+
+-- Daily Cost by IR (for trend analysis)
+DailyCostByIR = 
+CALCULATE(
+    SUM('FactPipelineRun'[BillingCost]),
+    ALLSELECTED('FactPipelineRun'[StartTime]),
+    VALUES('DimDate'[Date]),
+    ALLSELECTED('DimIntegrationRuntime')
+)
+
+-- Average Tokens Per Run by IR
+AvgTokensPerRunByIR = 
+DIVIDE(
+    [TotalTokensByIR],
+    CALCULATE(
+        COUNTROWS('FactPipelineRun'),
+        ALLSELECTED('DimIntegrationRuntime')
+    ),
+    0
+)
+
+-- Average Cost Per Run by IR
+AvgCostPerRunByIR = 
+DIVIDE(
+    [TotalCostByIR],
+    CALCULATE(
+        COUNTROWS('FactPipelineRun'),
+        ALLSELECTED('DimIntegrationRuntime')
+    ),
+    0
+)
+
+-- IR Run Count
+RunCountByIR = 
+CALCULATE(
+    COUNTROWS('FactPipelineRun'),
+    ALLSELECTED('DimIntegrationRuntime')
+)
+
+-- IR Run Count (Last 24 Hours)
+RunCountByIR_Last24H = 
+CALCULATE(
+    COUNTROWS('FactPipelineRun'),
+    'FactPipelineRun'[StartTime] >= NOW() - 1,
+    ALLSELECTED('DimIntegrationRuntime')
+)
+
+-- Total DBU Usage (from FactComputeUsage)
+TotalDBUByIR = 
+SUMX(
+    RELATEDTABLE('FactComputeUsage'),
+    CALCULATE(
+        SUM('FactComputeUsage'[UsageQuantity]),
+        'FactComputeUsage'[UsageUnit] = "DBU"
+    )
+)
+
+-- Total DBU Cost (from FactComputeUsage)
+TotalDBUCost = 
+CALCULATE(
+    SUM('FactComputeUsage'[Cost]),
+    'FactComputeUsage'[UsageUnit] = "DBU"
+)
+
+-- Total DBU Usage (Last 24 Hours)
+TotalDBU_Last24H = 
+CALCULATE(
+    SUM('FactComputeUsage'[UsageQuantity]),
+    'FactComputeUsage'[UsageUnit] = "DBU",
+    'FactComputeUsage'[UsageStartTime] >= NOW() - 1
+)
+
+-- Total DBU Cost (Last 24 Hours)
+TotalDBUCost_Last24H = 
+CALCULATE(
+    SUM('FactComputeUsage'[Cost]),
+    'FactComputeUsage'[UsageUnit] = "DBU",
+    'FactComputeUsage'[UsageStartTime] >= NOW() - 1
+)
+
+-- Daily DBU Usage (for trend analysis)
+DailyDBUUsage = 
+CALCULATE(
+    SUM('FactComputeUsage'[UsageQuantity]),
+    'FactComputeUsage'[UsageUnit] = "DBU",
+    ALLSELECTED('FactComputeUsage'[UsageStartTime]),
+    VALUES('DimDate'[Date])
+)
+
+-- Daily DBU Cost (for trend analysis)
+DailyDBUCost = 
+CALCULATE(
+    SUM('FactComputeUsage'[Cost]),
+    'FactComputeUsage'[UsageUnit] = "DBU",
+    ALLSELECTED('FactComputeUsage'[UsageStartTime]),
+    VALUES('DimDate'[Date])
+)
+
+-- Average DBU Per Hour
+AvgDBUPerHour = 
+DIVIDE(
+    [TotalDBUByIR],
+    CALCULATE(
+        SUMX(
+            RELATEDTABLE('FactComputeUsage'),
+            DATEDIFF(HOUR, 'FactComputeUsage'[UsageStartTime], 'FactComputeUsage'[UsageEndTime])
+        )
+    ),
+    0
+)
+

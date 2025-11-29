@@ -1,0 +1,203 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2018-06-01/Microsoft.DataFactory.json",
+  "name": "pl_ingest_adf_pipelineruns",
+  "properties": {
+    "description": "Pipeline to ingest Azure Data Factory pipeline run and activity run logs into staging tables, then transform and load into data warehouse.",
+    "activities": [
+      {
+        "name": "IngestPipelineRuns",
+        "type": "WebActivity",
+        "dependsOn": [],
+        "policy": {
+          "timeout": "7.00:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "url": "https://management.azure.com/subscriptions/@{pipeline().parameters.subscriptionId}/resourceGroups/@{pipeline().parameters.resourceGroupName}/providers/Microsoft.DataFactory/factories/@{pipeline().parameters.dataFactoryName}/pipelineruns?api-version=2018-06-01",
+          "method": "GET",
+          "headers": {
+            "Authorization": "Bearer @{activity('GetAccessToken').output.access_token}"
+          },
+          "body": null
+        },
+        "description": "Calls Azure Management API to retrieve ADF pipeline run logs. In a real implementation, this would query ADF logs and transform them into the staging schema format."
+      },
+      {
+        "name": "GetAccessToken",
+        "type": "WebActivity",
+        "dependsOn": [],
+        "policy": {
+          "timeout": "0.01:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "url": "https://login.microsoftonline.com/@{pipeline().parameters.tenantId}/oauth2/token",
+          "method": "POST",
+          "body": "grant_type=client_credentials&resource=https://management.azure.com/&client_id=@{pipeline().parameters.clientId}&client_secret=@{pipeline().parameters.clientSecret}",
+          "headers": {
+            "Content-Type": "application/x-www-form-urlencoded"
+          }
+        },
+        "description": "Obtains OAuth access token for Azure Management API calls."
+      },
+      {
+        "name": "TransformAndStagePipelineRuns",
+        "type": "Copy",
+        "dependsOn": [
+          {
+            "activity": "IngestPipelineRuns",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "policy": {
+          "timeout": "7.00:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "source": {
+            "type": "JsonSource",
+            "storeSettings": {
+              "type": "AzureBlobStorageReadSettings",
+              "recursive": true
+            },
+            "formatSettings": {
+              "type": "JsonReadSettings"
+            }
+          },
+          "sink": {
+            "type": "AzureSqlSink",
+            "writeBehavior": "insert",
+            "sqlWriterStoredProcedureName": "stg.UpsertPipelineRun_ADF",
+            "sqlWriterTableType": "stg.PipelineRun_ADF_TableType",
+            "storedProcedureTableTypeParameterName": "PipelineRunData",
+            "tableOption": "autoCreate"
+          },
+          "enableStaging": false,
+          "translator": {
+            "type": "TabularTranslator",
+            "mappings": [
+              {
+                "source": {
+                  "path": "['runId']"
+                },
+                "sink": {
+                  "name": "PipelineRunId",
+                  "type": "String"
+                }
+              },
+              {
+                "source": {
+                  "path": "['pipelineName']"
+                },
+                "sink": {
+                  "name": "PipelineName",
+                  "type": "String"
+                }
+              },
+              {
+                "source": {
+                  "path": "['status']"
+                },
+                "sink": {
+                  "name": "Status",
+                  "type": "String"
+                }
+              }
+            ]
+          }
+        },
+        "inputs": [
+          {
+            "referenceName": "ds_blob_pipeline_logs",
+            "type": "DatasetReference"
+          }
+        ],
+        "outputs": [
+          {
+            "referenceName": "ds_sql_stg_pipelinerun_adf",
+            "type": "DatasetReference"
+          }
+        ],
+        "description": "Transforms JSON pipeline run logs into staging table format. For demo purposes, this can be replaced with direct SQL inserts from sample data."
+      },
+      {
+        "name": "ExecuteUpsertToDW",
+        "type": "SqlServerStoredProcedure",
+        "dependsOn": [
+          {
+            "activity": "TransformAndStagePipelineRuns",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "policy": {
+          "timeout": "7.00:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "storedProcedureName": "dw.UpsertFromStaging",
+          "storedProcedureParameters": {
+            "ETLBatchId": {
+              "value": "@{pipeline().RunId}",
+              "type": "String"
+            }
+          }
+        },
+        "description": "Executes stored procedure to upsert data from staging tables into data warehouse fact and dimension tables."
+      }
+    ],
+    "parameters": {
+      "subscriptionId": {
+        "type": "String",
+        "defaultValue": "",
+        "description": "Azure subscription ID"
+      },
+      "resourceGroupName": {
+        "type": "String",
+        "defaultValue": "",
+        "description": "Resource group name containing the ADF instance"
+      },
+      "dataFactoryName": {
+        "type": "String",
+        "defaultValue": "",
+        "description": "Name of the Azure Data Factory instance to query"
+      },
+      "tenantId": {
+        "type": "String",
+        "defaultValue": "",
+        "description": "Azure AD tenant ID for authentication"
+      },
+      "clientId": {
+        "type": "String",
+        "defaultValue": "",
+        "description": "Service principal client ID"
+      },
+      "clientSecret": {
+        "type": "String",
+        "defaultValue": "",
+        "description": "Service principal client secret (use Azure Key Vault)"
+      }
+    },
+    "variables": {},
+    "annotations": [
+      "Purpose: Ingest ADF pipeline run logs into data warehouse",
+      "Note: For demo purposes, use sample SQL insert scripts instead of API calls",
+      "Real implementation: Query ADF REST API or Azure Monitor logs"
+    ]
+  }
+}

@@ -1,0 +1,87 @@
+-- ====================================================================
+-- Cost Metrics DAX Measures
+-- ====================================================================
+-- This file contains DAX measures for analyzing costs associated with
+-- pipeline runs, including billing costs, compute usage costs, and
+-- cost breakdowns by pipeline, IR, or time period.
+-- ====================================================================
+
+-- Total Billing Cost (All Pipeline Runs)
+TotalBillingCost = 
+SUM('FactPipelineRun'[BillingCost])
+
+-- Total Billing Cost (Last 24 Hours)
+TotalBillingCost_Last24H = 
+CALCULATE(
+    SUM('FactPipelineRun'[BillingCost]),
+    'FactPipelineRun'[StartTime] >= NOW() - 1
+)
+
+-- Total Billing Cost (Last 7 Days)
+TotalBillingCost_Last7D = 
+CALCULATE(
+    SUM('FactPipelineRun'[BillingCost]),
+    'FactPipelineRun'[StartTime] >= TODAY() - 7
+)
+
+-- Total Billing Cost (Last 30 Days)
+TotalBillingCost_Last30D = 
+CALCULATE(
+    SUM('FactPipelineRun'[BillingCost]),
+    'FactPipelineRun'[StartTime] >= TODAY() - 30
+)
+
+-- Average Billing Cost Per Run
+AvgBillingCostPerRun = 
+DIVIDE(
+    [TotalBillingCost],
+    [TotalPipelineRuns],
+    0
+)
+
+-- Total Compute Usage Cost
+TotalComputeUsageCost = 
+SUM('FactComputeUsage'[Cost])
+
+-- Total Compute Usage Cost (Last 24 Hours)
+TotalComputeUsageCost_Last24H = 
+CALCULATE(
+    SUM('FactComputeUsage'[Cost]),
+    'FactComputeUsage'[UsageStartTime] >= NOW() - 1
+)
+
+-- Total Cost (Pipeline Runs + Compute Usage)
+TotalCost = 
+[TotalBillingCost] + [TotalComputeUsageCost]
+
+-- Total Cost (Last 24 Hours)
+TotalCost_Last24H = 
+[TotalBillingCost_Last24H] + [TotalComputeUsageCost_Last24H]
+
+-- Cost Per Token (Average)
+AvgCostPerToken = 
+DIVIDE(
+    [TotalBillingCost],
+    [TotalTokensUsed],
+    0
+)
+
+-- Cost Per Row Processed (Average)
+AvgCostPerRow = 
+DIVIDE(
+    [TotalBillingCost],
+    [TotalRowsProcessed],
+    0
+)
+
+-- Daily Cost Trend
+DailyCost = 
+CALCULATE(
+    [TotalBillingCost],
+    ALL('FactPipelineRun'[StartTime]),
+    VALUES('DimDate'[Date])
+)
+
+-- Top 10 Costliest Pipelines (Last 24 Hours) - Use in Table Visual
+-- Note: This is a calculated column or measure to use with TOPN
+

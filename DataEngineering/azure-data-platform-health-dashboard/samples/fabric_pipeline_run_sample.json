@@ -1,0 +1,48 @@
+[
+  {
+    "SourceSystem": "Fabric",
+    "Environment": "Prod",
+    "WorkspaceId": "ws-001",
+    "ItemId": "item-001",
+    "PipelineRunId": "fabric-run-001",
+    "PipelineName": "Fabric Sales Pipeline",
+    "StartTime": "2025-01-01T10:00:00.000Z",
+    "EndTime": "2025-01-01T10:30:00.000Z",
+    "Status": "Succeeded",
+    "RowsProcessed": 200000,
+    "BytesProcessed": 209715200,
+    "TokensUsed": 1500.0,
+    "BillingCost": 2.25
+  },
+  {
+    "SourceSystem": "Fabric",
+    "Environment": "Prod",
+    "WorkspaceId": "ws-001",
+    "ItemId": "item-002",
+    "PipelineRunId": "fabric-run-002",
+    "PipelineName": "Fabric Orders Pipeline",
+    "StartTime": "2025-01-01T11:00:00.000Z",
+    "EndTime": "2025-01-01T11:20:00.000Z",
+    "Status": "Succeeded",
+    "RowsProcessed": 150000,
+    "BytesProcessed": 157286400,
+    "TokensUsed": 1200.0,
+    "BillingCost": 1.80
+  },
+  {
+    "SourceSystem": "Fabric",
+    "Environment": "Prod",
+    "WorkspaceId": "ws-001",
+    "ItemId": "item-001",
+    "PipelineRunId": "fabric-run-003",
+    "PipelineName": "Fabric Sales Pipeline",
+    "StartTime": "2025-01-02T10:00:00.000Z",
+    "EndTime": "2025-01-02T10:35:00.000Z",
+    "Status": "Failed",
+    "RowsProcessed": 180000,
+    "BytesProcessed": 188743680,
+    "TokensUsed": 1650.0,
+    "BillingCost": 2.48
+  }
+]
+

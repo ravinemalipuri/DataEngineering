@@ -1,0 +1,249 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2018-06-01/Microsoft.DataFactory.json",
+  "name": "pl_ingest_fabric_pipelineruns",
+  "properties": {
+    "description": "Fabric Data Factory pipeline to ingest Microsoft Fabric pipeline run logs into staging tables. This follows the same pattern as ADF but uses Fabric-specific APIs.",
+    "activities": [
+      {
+        "name": "IngestFabricPipelineRuns",
+        "type": "WebActivity",
+        "dependsOn": [],
+        "policy": {
+          "timeout": "7.00:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "url": "https://api.fabric.microsoft.com/v1/workspaces/@{pipeline().parameters.workspaceId}/items/@{pipeline().parameters.itemId}/runs?api-version=2024-01-01",
+          "method": "GET",
+          "headers": {
+            "Authorization": "Bearer @{activity('GetFabricAccessToken').output.access_token}"
+          },
+          "body": null
+        },
+        "description": "Calls Microsoft Fabric REST API to retrieve pipeline run logs. In a real implementation, this would query Fabric logs and transform them into the staging schema format."
+      },
+      {
+        "name": "GetFabricAccessToken",
+        "type": "WebActivity",
+        "dependsOn": [],
+        "policy": {
+          "timeout": "0.01:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "url": "https://login.microsoftonline.com/@{pipeline().parameters.tenantId}/oauth2/token",
+          "method": "POST",
+          "body": "grant_type=client_credentials&resource=https://analysis.windows.net/powerbi/api&client_id=@{pipeline().parameters.clientId}&client_secret=@{pipeline().parameters.clientSecret}",
+          "headers": {
+            "Content-Type": "application/x-www-form-urlencoded"
+          }
+        },
+        "description": "Obtains OAuth access token for Microsoft Fabric REST API calls."
+      },
+      {
+        "name": "TransformAndStageFabricRuns",
+        "type": "Copy",
+        "dependsOn": [
+          {
+            "activity": "IngestFabricPipelineRuns",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "policy": {
+          "timeout": "7.00:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "source": {
+            "type": "JsonSource",
+            "storeSettings": {
+              "type": "HttpReadSettings",
+              "requestMethod": "GET"
+            },
+            "formatSettings": {
+              "type": "JsonReadSettings"
+            }
+          },
+          "sink": {
+            "type": "WarehouseSink",
+            "writeBehavior": "insert",
+            "allowCopyCommand": true
+          },
+          "enableStaging": false,
+          "translator": {
+            "type": "TabularTranslator",
+            "mappings": [
+              {
+                "source": {
+                  "path": "['runId']"
+                },
+                "sink": {
+                  "name": "PipelineRunId",
+                  "type": "String"
+                }
+              },
+              {
+                "source": {
+                  "path": "['pipelineName']"
+                },
+                "sink": {
+                  "name": "PipelineName",
+                  "type": "String"
+                }
+              },
+              {
+                "source": {
+                  "path": "['workspaceId']"
+                },
+                "sink": {
+                  "name": "WorkspaceId",
+                  "type": "String"
+                }
+              },
+              {
+                "source": {
+                  "path": "['itemId']"
+                },
+                "sink": {
+                  "name": "ItemId",
+                  "type": "String"
+                }
+              },
+              {
+                "source": {
+                  "path": "['status']"
+                },
+                "sink": {
+                  "name": "Status",
+                  "type": "String"
+                }
+              },
+              {
+                "source": {
+                  "path": "['startTime']"
+                },
+                "sink": {
+                  "name": "StartTime",
+                  "type": "DateTime"
+                }
+              },
+              {
+                "source": {
+                  "path": "['endTime']"
+                },
+                "sink": "EndTime",
+                "type": "DateTime"
+              },
+              {
+                "source": {
+                  "path": "['tokensUsed']"
+                },
+                "sink": {
+                  "name": "TokensUsed",
+                  "type": "Decimal"
+                }
+              },
+              {
+                "source": {
+                  "path": "['billingCost']"
+                },
+                "sink": {
+                  "name": "BillingCost",
+                  "type": "Decimal"
+                }
+              }
+            ]
+          }
+        },
+        "inputs": [
+          {
+            "referenceName": "ds_fabric_pipeline_logs",
+            "type": "DatasetReference"
+          }
+        ],
+        "outputs": [
+          {
+            "referenceName": "ds_fabric_warehouse_stg_pipelinerun",
+            "type": "DatasetReference"
+          }
+        ],
+        "description": "Transforms Fabric pipeline run logs into staging table format. Can also target Azure SQL Database for consistency with ADF patterns."
+      },
+      {
+        "name": "ExecuteUpsertToDW",
+        "type": "SqlServerStoredProcedure",
+        "dependsOn": [
+          {
+            "activity": "TransformAndStageFabricRuns",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "policy": {
+          "timeout": "7.00:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "storedProcedureName": "dw.UpsertFromStaging",
+          "storedProcedureParameters": {
+            "ETLBatchId": {
+              "value": "@{pipeline().RunId}",
+              "type": "String"
+            }
+          }
+        },
+        "description": "Executes stored procedure to upsert data from staging tables into data warehouse fact and dimension tables."
+      }
+    ],
+    "parameters": {
+      "workspaceId": {
+        "type": "String",
+        "defaultValue": "",
+        "description": "Microsoft Fabric workspace ID"
+      },
+      "itemId": {
+        "type": "String",
+        "defaultValue": "",
+        "description": "Fabric pipeline item ID"
+      },
+      "tenantId": {
+        "type": "String",
+        "defaultValue": "",
+        "description": "Azure AD tenant ID for authentication"
+      },
+      "clientId": {
+        "type": "String",
+        "defaultValue": "",
+        "description": "Service principal client ID"
+      },
+      "clientSecret": {
+        "type": "String",
+        "defaultValue": "",
+        "description": "Service principal client secret (use Azure Key Vault)"
+      }
+    },
+    "variables": {},
+    "annotations": [
+      "Purpose: Ingest Microsoft Fabric pipeline run logs into data warehouse",
+      "Note: For demo purposes, use sample SQL insert scripts instead of API calls",
+      "Real implementation: Query Fabric REST API or Fabric monitoring endpoints",
+      "Target: Can use Fabric Warehouse or Azure SQL Database as destination"
+    ]
+  }
+}
+

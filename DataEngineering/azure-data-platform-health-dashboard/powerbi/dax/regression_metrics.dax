@@ -1,0 +1,154 @@
+-- ====================================================================
+-- Regression & Performance Metrics DAX Measures
+-- ====================================================================
+-- This file contains DAX measures for detecting performance regression,
+-- comparing current metrics against historical baselines, and identifying
+-- pipelines that have degraded in performance over time.
+-- ====================================================================
+
+-- Baseline Period: Last 7 Days (excluding today)
+-- This measure calculates the baseline average tokens per run over the past 7 days
+BaselineAvgTokensPerRun_7D = 
+CALCULATE(
+    DIVIDE(
+        SUM('FactPipelineRun'[TokensUsed]),
+        COUNTROWS('FactPipelineRun'),
+        0
+    ),
+    'FactPipelineRun'[StartTime] >= TODAY() - 7
+    && 'FactPipelineRun'[StartTime] < TODAY()
+)
+
+-- Baseline Average Duration (seconds) - Last 7 Days
+BaselineAvgDurationSeconds_7D = 
+CALCULATE(
+    AVERAGE('FactPipelineRun'[DurationSeconds]),
+    'FactPipelineRun'[StartTime] >= TODAY() - 7
+    && 'FactPipelineRun'[StartTime] < TODAY()
+)
+
+-- Current Period: Last 24 Hours
+-- Average tokens per run in the last 24 hours
+CurrentAvgTokensPerRun_24H = 
+CALCULATE(
+    DIVIDE(
+        SUM('FactPipelineRun'[TokensUsed]),
+        COUNTROWS('FactPipelineRun'),
+        0
+    ),
+    'FactPipelineRun'[StartTime] >= NOW() - 1
+)
+
+-- Current Average Duration (seconds) - Last 24 Hours
+CurrentAvgDurationSeconds_24H = 
+CALCULATE(
+    AVERAGE('FactPipelineRun'[DurationSeconds]),
+    'FactPipelineRun'[StartTime] >= NOW() - 1
+)
+
+-- Token Regression % (compared to 7-day baseline)
+-- Positive values indicate regression (more tokens used)
+TokenRegressionPercent = 
+VAR CurrentAvg = [CurrentAvgTokensPerRun_24H]
+VAR BaselineAvg = [BaselineAvgTokensPerRun_7D]
+RETURN
+    IF(
+        BaselineAvg > 0,
+        DIVIDE(CurrentAvg - BaselineAvg, BaselineAvg, 0) * 100,
+        0
+    )
+
+-- Duration Regression % (compared to 7-day baseline)
+-- Positive values indicate regression (longer duration)
+DurationRegressionPercent = 
+VAR CurrentAvg = [CurrentAvgDurationSeconds_24H]
+VAR BaselineAvg = [BaselineAvgDurationSeconds_7D]
+RETURN
+    IF(
+        BaselineAvg > 0,
+        DIVIDE(CurrentAvg - BaselineAvg, BaselineAvg, 0) * 100,
+        0
+    )
+
+-- Token Regression Indicator (True if regression > 10%)
+HasTokenRegression = 
+ABS([TokenRegressionPercent]) > 10
+
+-- Duration Regression Indicator (True if regression > 10%)
+HasDurationRegression = 
+ABS([DurationRegressionPercent]) > 10
+
+-- Performance Regression Score (0-100, higher is worse)
+-- Combines token and duration regression
+PerformanceRegressionScore = 
+VAR TokenReg = ABS([TokenRegressionPercent])
+VAR DurationReg = ABS([DurationRegressionPercent])
+VAR MaxReg = MAX(TokenReg, DurationReg)
+RETURN
+    IF(
+        MaxReg > 50, 100,
+        IF(
+            MaxReg > 20, 75,
+            IF(
+                MaxReg > 10, 50,
+                IF(
+                    MaxReg > 5, 25,
+                    0
+                )
+            )
+        )
+    )
+
+-- Pipeline-Level Regression (for use with DimPipeline)
+-- Average tokens per run for a specific pipeline (Last 7 Days Baseline)
+PipelineBaselineAvgTokens_7D = 
+CALCULATE(
+    DIVIDE(
+        SUM('FactPipelineRun'[TokensUsed]),
+        COUNTROWS('FactPipelineRun'),
+        0
+    ),
+    ALLSELECTED('FactPipelineRun'[StartTime]),
+    'FactPipelineRun'[StartTime] >= TODAY() - 7
+    && 'FactPipelineRun'[StartTime] < TODAY()
+)
+
+-- Pipeline-Level Regression (for use with DimPipeline)
+-- Average tokens per run for a specific pipeline (Last 24 Hours)
+PipelineCurrentAvgTokens_24H = 
+CALCULATE(
+    DIVIDE(
+        SUM('FactPipelineRun'[TokensUsed]),
+        COUNTROWS('FactPipelineRun'),
+        0
+    ),
+    ALLSELECTED('FactPipelineRun'[StartTime]),
+    'FactPipelineRun'[StartTime] >= NOW() - 1
+)
+
+-- Pipeline Token Regression %
+PipelineTokenRegressionPercent = 
+VAR Current = [PipelineCurrentAvgTokens_24H]
+VAR Baseline = [PipelineBaselineAvgTokens_7D]
+RETURN
+    IF(
+        Baseline > 0,
+        DIVIDE(Current - Baseline, Baseline, 0) * 100,
+        0
+    )
+
+-- Baseline Run Count (Last 7 Days)
+BaselineRunCount_7D = 
+CALCULATE(
+    COUNTROWS('FactPipelineRun'),
+    'FactPipelineRun'[StartTime] >= TODAY() - 7
+    && 'FactPipelineRun'[StartTime] < TODAY()
+)
+
+-- Current Run Count (Last 24 Hours)
+CurrentRunCount_24H = 
+CALCULATE(
+    COUNTROWS('FactPipelineRun'),
+    'FactPipelineRun'[StartTime] >= NOW() - 1
+)
+

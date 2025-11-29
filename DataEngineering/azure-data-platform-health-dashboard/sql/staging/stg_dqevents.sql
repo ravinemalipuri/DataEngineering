@@ -1,0 +1,12 @@
+CREATE TABLE stg.DQEvents (
+    Environment NVARCHAR(50) NOT NULL,
+    PipelineRunId NVARCHAR(200) NOT NULL,
+    CheckName NVARCHAR(200) NOT NULL,
+    CheckType NVARCHAR(100) NULL,
+    Status NVARCHAR(50) NOT NULL,
+    FailedRowCount BIGINT NULL,
+    DetailsJson NVARCHAR(MAX) NULL,
+    EventTime DATETIME2(3) NOT NULL,
+    InsertedOn DATETIME2(3) NOT NULL DEFAULT SYSUTCDATETIME()
+);
+GO

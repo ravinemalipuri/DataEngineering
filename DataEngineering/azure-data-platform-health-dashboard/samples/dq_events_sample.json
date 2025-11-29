@@ -1,0 +1,53 @@
+[
+  {
+    "Environment": "Prod",
+    "PipelineRunId": "run-001",
+    "CheckName": "NullCheck_CustomerId",
+    "CheckType": "Completeness",
+    "Status": "Pass",
+    "FailedRowCount": 0,
+    "DetailsJson": null,
+    "EventTime": "2025-01-01T01:11:00.000Z"
+  },
+  {
+    "Environment": "Prod",
+    "PipelineRunId": "run-002",
+    "CheckName": "NullCheck_OrderId",
+    "CheckType": "Completeness",
+    "Status": "Fail",
+    "FailedRowCount": 25,
+    "DetailsJson": "{\"threshold\":0,\"actual_failed\":25,\"total_rows\":50000}",
+    "EventTime": "2025-01-01T02:35:00.000Z"
+  },
+  {
+    "Environment": "Prod",
+    "PipelineRunId": "run-003",
+    "CheckName": "RangeCheck_SalesAmount",
+    "CheckType": "Validity",
+    "Status": "Pass",
+    "FailedRowCount": 0,
+    "DetailsJson": "{\"min_value\":0,\"max_value\":1000000}",
+    "EventTime": "2025-01-01T03:16:00.000Z"
+  },
+  {
+    "Environment": "Prod",
+    "PipelineRunId": "run-004",
+    "CheckName": "DuplicateCheck_OrderNumber",
+    "CheckType": "Uniqueness",
+    "Status": "Pass",
+    "FailedRowCount": 0,
+    "DetailsJson": null,
+    "EventTime": "2025-01-01T04:21:00.000Z"
+  },
+  {
+    "Environment": "Prod",
+    "PipelineRunId": "run-005",
+    "CheckName": "ReferentialCheck_CustomerId",
+    "CheckType": "ReferentialIntegrity",
+    "Status": "Pass",
+    "FailedRowCount": 0,
+    "DetailsJson": "{\"referenced_table\":\"dim_customer\"}",
+    "EventTime": "2025-01-02T01:13:00.000Z"
+  }
+]
+

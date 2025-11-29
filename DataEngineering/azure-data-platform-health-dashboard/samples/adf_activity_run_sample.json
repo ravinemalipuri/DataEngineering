@@ -1,0 +1,54 @@
+[
+  {
+    "SourceSystem": "ADF",
+    "Environment": "Prod",
+    "ActivityRunId": "act-001",
+    "PipelineRunId": "run-001",
+    "PipelineName": "ADF Sales Ingest",
+    "ActivityName": "CopyFromSFDC",
+    "ActivityType": "Copy",
+    "IRName": "AutoResolveIntegrationRuntime",
+    "StartTime": "2025-01-01T01:01:00.000Z",
+    "EndTime": "2025-01-01T01:09:00.000Z",
+    "Status": "Succeeded",
+    "RowsRead": 100000,
+    "RowsWritten": 100000,
+    "BytesRead": 52428800,
+    "BytesWritten": 104857600
+  },
+  {
+    "SourceSystem": "ADF",
+    "Environment": "Prod",
+    "ActivityRunId": "act-002",
+    "PipelineRunId": "run-002",
+    "PipelineName": "ADF SAP Orders",
+    "ActivityName": "CopyFromSAP",
+    "ActivityType": "Copy",
+    "IRName": "AutoResolveIntegrationRuntime",
+    "StartTime": "2025-01-01T02:05:00.000Z",
+    "EndTime": "2025-01-01T02:25:00.000Z",
+    "Status": "Failed",
+    "RowsRead": 50000,
+    "RowsWritten": 25000,
+    "BytesRead": 26214400,
+    "BytesWritten": 52428800
+  },
+  {
+    "SourceSystem": "ADF",
+    "Environment": "Prod",
+    "ActivityRunId": "act-003",
+    "PipelineRunId": "run-001",
+    "PipelineName": "ADF Sales Ingest",
+    "ActivityName": "TransformSalesData",
+    "ActivityType": "DataFlow",
+    "IRName": "AutoResolveIntegrationRuntime",
+    "StartTime": "2025-01-01T01:09:00.000Z",
+    "EndTime": "2025-01-01T01:10:00.000Z",
+    "Status": "Succeeded",
+    "RowsRead": 100000,
+    "RowsWritten": 100000,
+    "BytesRead": 104857600,
+    "BytesWritten": 104857600
+  }
+]
+

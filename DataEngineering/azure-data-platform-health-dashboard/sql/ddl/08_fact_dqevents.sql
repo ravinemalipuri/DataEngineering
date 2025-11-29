@@ -1,0 +1,13 @@
+CREATE TABLE dw.FactDQEvents (
+    DQEventKey BIGINT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    DateKey INT NOT NULL,
+    PipelineRunKey BIGINT NULL,
+    PipelineRunId NVARCHAR(200) NULL,
+    CheckName NVARCHAR(200) NOT NULL,
+    CheckType NVARCHAR(100) NULL,
+    Status NVARCHAR(50) NOT NULL,
+    FailedRowCount BIGINT NULL,
+    DetailsJson NVARCHAR(MAX) NULL,
+    InsertedOn DATETIME2(3) NOT NULL DEFAULT SYSUTCDATETIME()
+);
+GO

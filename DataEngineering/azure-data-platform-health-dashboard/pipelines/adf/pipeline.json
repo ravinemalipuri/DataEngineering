@@ -1,0 +1,146 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2018-06-01/Microsoft.DataFactory.json",
+  "name": "adf-pipeline-example",
+  "properties": {
+    "description": "Example ADF pipeline for ingesting compute usage logs (e.g., from Databricks) into staging tables.",
+    "activities": [
+      {
+        "name": "IngestComputeUsage",
+        "type": "Copy",
+        "dependsOn": [],
+        "policy": {
+          "timeout": "7.00:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "source": {
+            "type": "AzureDatabricksDeltaLakeSource",
+            "query": "SELECT * FROM system.billing.usage WHERE usage_date >= CURRENT_DATE - INTERVAL '7' DAY",
+            "exportSettings": {
+              "type": "AzureDatabricksDeltaLakeExportCommand"
+            }
+          },
+          "sink": {
+            "type": "AzureSqlSink",
+            "writeBehavior": "insert",
+            "sqlWriterStoredProcedureName": "stg.UpsertComputeUsage",
+            "sqlWriterTableType": "stg.ComputeUsage_TableType",
+            "tableOption": "autoCreate"
+          },
+          "enableStaging": false,
+          "translator": {
+            "type": "TabularTranslator",
+            "mappings": [
+              {
+                "source": {
+                  "path": "['usage_date']"
+                },
+                "sink": {
+                  "name": "UsageDate",
+                  "type": "Date"
+                }
+              },
+              {
+                "source": {
+                  "path": "['usage_unit']"
+                },
+                "sink": {
+                  "name": "UsageUnit",
+                  "type": "String"
+                }
+              },
+              {
+                "source": {
+                  "path": "['usage_quantity']"
+                },
+                "sink": {
+                  "name": "UsageQuantity",
+                  "type": "Decimal"
+                }
+              },
+              {
+                "source": {
+                  "path": "['cost']"
+                },
+                "sink": {
+                  "name": "Cost",
+                  "type": "Decimal"
+                }
+              },
+              {
+                "source": {
+                  "path": "['job_id']"
+                },
+                "sink": {
+                  "name": "JobId",
+                  "type": "String"
+                }
+              },
+              {
+                "source": {
+                  "path": "['cluster_id']"
+                },
+                "sink": {
+                  "name": "ClusterId",
+                  "type": "String"
+                }
+              }
+            ]
+          }
+        },
+        "inputs": [
+          {
+            "referenceName": "ds_databricks_usage",
+            "type": "DatasetReference"
+          }
+        ],
+        "outputs": [
+          {
+            "referenceName": "ds_sql_stg_computeusage",
+            "type": "DatasetReference"
+          }
+        ],
+        "description": "Ingests compute usage data from Databricks system.billing.usage table. For demo, use SQL insert scripts with sample data instead."
+      },
+      {
+        "name": "UpsertToDW",
+        "type": "SqlServerStoredProcedure",
+        "dependsOn": [
+          {
+            "activity": "IngestComputeUsage",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "policy": {
+          "timeout": "7.00:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "storedProcedureName": "dw.UpsertFromStaging",
+          "storedProcedureParameters": {
+            "ETLBatchId": {
+              "value": "@{pipeline().RunId}",
+              "type": "String"
+            }
+          }
+        },
+        "description": "Upserts compute usage data from staging to data warehouse."
+      }
+    ],
+    "parameters": {},
+    "variables": {},
+    "annotations": [
+      "Purpose: Ingest compute usage logs (Databricks DBUs) into data warehouse",
+      "Note: For demo purposes, use sample SQL insert scripts instead",
+      "Real implementation: Query Databricks system.billing.usage or Azure Cost Management API"
+    ]
+  }
+}

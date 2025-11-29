@@ -1,0 +1,101 @@
+-- ====================================================================
+-- Pipeline Metrics DAX Measures
+-- ====================================================================
+-- This file contains DAX measures for analyzing pipeline performance,
+-- including total runs, success rates, durations, and token usage.
+-- ====================================================================
+
+-- Total Pipeline Runs
+TotalPipelineRuns = 
+COUNTROWS('FactPipelineRun')
+
+-- Successful Pipeline Runs
+SuccessfulPipelineRuns = 
+CALCULATE(
+    COUNTROWS('FactPipelineRun'),
+    'FactPipelineRun'[Status] = "Succeeded"
+)
+
+-- Failed Pipeline Runs
+FailedPipelineRuns = 
+CALCULATE(
+    COUNTROWS('FactPipelineRun'),
+    'FactPipelineRun'[Status] = "Failed"
+)
+
+-- Pipeline Success Rate (%)
+PipelineSuccessRate = 
+DIVIDE(
+    [SuccessfulPipelineRuns],
+    [TotalPipelineRuns],
+    0
+) * 100
+
+-- Total Tokens Used
+TotalTokensUsed = 
+SUM('FactPipelineRun'[TokensUsed])
+
+-- Average Tokens Per Run
+AvgTokensPerRun = 
+DIVIDE(
+    [TotalTokensUsed],
+    [TotalPipelineRuns],
+    0
+)
+
+-- Total Pipeline Runs (Last 24 Hours)
+TotalPipelineRuns_Last24H = 
+CALCULATE(
+    COUNTROWS('FactPipelineRun'),
+    'FactPipelineRun'[StartTime] >= NOW() - 1
+)
+
+-- Total Tokens Used (Last 24 Hours)
+TotalTokensUsed_Last24H = 
+CALCULATE(
+    SUM('FactPipelineRun'[TokensUsed]),
+    'FactPipelineRun'[StartTime] >= NOW() - 1
+)
+
+-- Average Tokens Per Run (Last 24 Hours)
+AvgTokensPerRun_Last24H = 
+DIVIDE(
+    [TotalTokensUsed_Last24H],
+    [TotalPipelineRuns_Last24H],
+    0
+)
+
+-- Total Duration (seconds) - All Runs
+TotalDurationSeconds = 
+SUM('FactPipelineRun'[DurationSeconds])
+
+-- Average Duration (seconds) - All Runs
+AvgDurationSeconds = 
+AVERAGE('FactPipelineRun'[DurationSeconds])
+
+-- Average Duration (minutes) - All Runs
+AvgDurationMinutes = 
+[AvgDurationSeconds] / 60
+
+-- Average Duration (Last 24 Hours) - seconds
+AvgDurationSeconds_Last24H = 
+CALCULATE(
+    AVERAGE('FactPipelineRun'[DurationSeconds]),
+    'FactPipelineRun'[StartTime] >= NOW() - 1
+)
+
+-- Rows Processed (Total)
+TotalRowsProcessed = 
+SUM('FactPipelineRun'[RowsProcessed])
+
+-- Bytes Processed (Total)
+TotalBytesProcessed = 
+SUM('FactPipelineRun'[BytesProcessed])
+
+-- Average Throughput (rows/second)
+AvgThroughputRowsPerSec = 
+DIVIDE(
+    [TotalRowsProcessed],
+    [TotalDurationSeconds],
+    0
+)

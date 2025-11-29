@@ -1,0 +1,8 @@
+SourceSystem,Environment,UsageDate,UsageStartTime,UsageEndTime,UsageUnit,UsageQuantity,Cost,PipelineRunId,JobId,JobRunId,ClusterId,WarehouseId,CustomTagsJson
+Databricks,Prod,2025-01-01,2025-01-01T01:00:00.000Z,2025-01-01T01:15:00.000Z,DBU,5.0,0.50,run-001,job-123,jobrun-123-1,cluster-01,,{"adf_run_id":"run-001"}
+Databricks,Prod,2025-01-01,2025-01-01T02:00:00.000Z,2025-01-01T02:20:00.000Z,DBU,4.0,0.40,run-002,job-456,jobrun-456-1,cluster-02,,{"adf_run_id":"run-002"}
+Databricks,Prod,2025-01-01,2025-01-01T03:00:00.000Z,2025-01-01T03:18:00.000Z,DBU,6.5,0.65,run-003,job-789,jobrun-789-1,cluster-01,,{"adf_run_id":"run-003"}
+Databricks,Prod,2025-01-02,2025-01-02T01:00:00.000Z,2025-01-02T01:14:00.000Z,DBU,5.2,0.52,run-005,job-123,jobrun-123-2,cluster-01,,{"adf_run_id":"run-005"}
+Fabric,Prod,2025-01-01,2025-01-01T10:00:00.000Z,2025-01-01T10:30:00.000Z,Token,1500.0,2.25,fabric-run-001,,,warehouse-01,{"workspace_id":"ws-001"}
+Fabric,Prod,2025-01-01,2025-01-01T11:00:00.000Z,2025-01-01T11:20:00.000Z,Token,1200.0,1.80,fabric-run-002,,,warehouse-01,{"workspace_id":"ws-001"}
+

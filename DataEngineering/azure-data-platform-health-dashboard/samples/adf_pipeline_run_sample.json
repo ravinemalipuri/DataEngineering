@@ -1,0 +1,78 @@
+[
+  {
+    "SourceSystem": "ADF",
+    "Environment": "Prod",
+    "PipelineRunId": "run-001",
+    "PipelineId": "adf-pl-sales-ingest",
+    "PipelineName": "ADF Sales Ingest",
+    "IRName": "AutoResolveIntegrationRuntime",
+    "StartTime": "2025-01-01T01:00:00.000Z",
+    "EndTime": "2025-01-01T01:10:00.000Z",
+    "Status": "Succeeded",
+    "RowsProcessed": 100000,
+    "BytesProcessed": 104857600,
+    "TokensUsed": 10.5,
+    "BillingCost": 0.75
+  },
+  {
+    "SourceSystem": "ADF",
+    "Environment": "Prod",
+    "PipelineRunId": "run-002",
+    "PipelineId": "adf-pl-sap-orders",
+    "PipelineName": "ADF SAP Orders",
+    "IRName": "AutoResolveIntegrationRuntime",
+    "StartTime": "2025-01-01T02:00:00.000Z",
+    "EndTime": "2025-01-01T02:30:00.000Z",
+    "Status": "Failed",
+    "RowsProcessed": 50000,
+    "BytesProcessed": 52428800,
+    "TokensUsed": 8.0,
+    "BillingCost": 0.60
+  },
+  {
+    "SourceSystem": "ADF",
+    "Environment": "Prod",
+    "PipelineRunId": "run-003",
+    "PipelineId": "adf-pl-sales-ingest",
+    "PipelineName": "ADF Sales Ingest",
+    "IRName": "SelfHosted-IR-01",
+    "StartTime": "2025-01-01T03:00:00.000Z",
+    "EndTime": "2025-01-01T03:15:00.000Z",
+    "Status": "Succeeded",
+    "RowsProcessed": 150000,
+    "BytesProcessed": 157286400,
+    "TokensUsed": 12.3,
+    "BillingCost": 0.85
+  },
+  {
+    "SourceSystem": "ADF",
+    "Environment": "Prod",
+    "PipelineRunId": "run-004",
+    "PipelineId": "adf-pl-sap-orders",
+    "PipelineName": "ADF SAP Orders",
+    "IRName": "AutoResolveIntegrationRuntime",
+    "StartTime": "2025-01-01T04:00:00.000Z",
+    "EndTime": "2025-01-01T04:20:00.000Z",
+    "Status": "Succeeded",
+    "RowsProcessed": 75000,
+    "BytesProcessed": 78643200,
+    "TokensUsed": 9.5,
+    "BillingCost": 0.70
+  },
+  {
+    "SourceSystem": "ADF",
+    "Environment": "Prod",
+    "PipelineRunId": "run-005",
+    "PipelineId": "adf-pl-sales-ingest",
+    "PipelineName": "ADF Sales Ingest",
+    "IRName": "AutoResolveIntegrationRuntime",
+    "StartTime": "2025-01-02T01:00:00.000Z",
+    "EndTime": "2025-01-02T01:12:00.000Z",
+    "Status": "Succeeded",
+    "RowsProcessed": 110000,
+    "BytesProcessed": 115343360,
+    "TokensUsed": 11.2,
+    "BillingCost": 0.78
+  }
+]
+
