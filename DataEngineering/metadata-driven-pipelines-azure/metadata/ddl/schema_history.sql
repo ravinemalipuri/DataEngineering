@@ -22,6 +22,6 @@ CREATE TABLE [$(SchemaName)].schema_history (
     column_name         NVARCHAR(128) NOT NULL,
     data_type           NVARCHAR(128) NOT NULL,
     nullable_flag       BIT NOT NULL,
-    captured_utc        DATETIME2(3) NOT NULL DEFAULT (SYSUTCDATETIME())
+    captured_time        DATETIME2(3) NOT NULL DEFAULT (SYSUTCDATETIME())
 );
 GO

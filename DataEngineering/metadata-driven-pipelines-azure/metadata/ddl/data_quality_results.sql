@@ -28,6 +28,6 @@ CREATE TABLE [$(SchemaName)].data_quality_results (
     failure_count       BIGINT NULL,
     row_count           BIGINT NULL,
     dq_severity         NVARCHAR(20) NOT NULL DEFAULT ('WARN'),
-    run_utc             DATETIME2(3) NOT NULL DEFAULT (SYSUTCDATETIME())
+    run_time             DATETIME2(3) NOT NULL DEFAULT (SYSUTCDATETIME())
 );
 GO

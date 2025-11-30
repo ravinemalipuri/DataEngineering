@@ -33,13 +33,11 @@ CREATE TABLE [$(SchemaName)].source_objects (
     load_notes              NVARCHAR(1000) NULL,
     last_success_run        DATETIME2(3) NULL,
     is_active               BIT NOT NULL DEFAULT (1),
-    load_notes              NVARCHAR(1000) NULL,
     business_owner_name     NVARCHAR(200) NULL,
     business_owner_email    NVARCHAR(320) NULL,
     technical_owner_name    NVARCHAR(200) NULL,
     technical_owner_email   NVARCHAR(320) NULL,
     escalation_emails       NVARCHAR(MAX) NULL,  -- optional JSON array for table-specific alerts
-    last_success_run        DATETIME2(3) NULL,
     created_time            DATETIME2(3) NOT NULL DEFAULT (SYSUTCDATETIME()),
     updated_time            DATETIME2(3) NOT NULL DEFAULT (SYSUTCDATETIME()),
     CONSTRAINT UQ_source_object UNIQUE (source_system_id, source_object_name)
