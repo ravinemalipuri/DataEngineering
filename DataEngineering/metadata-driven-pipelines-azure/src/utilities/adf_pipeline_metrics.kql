@@ -1,0 +1,50 @@
+let startDate = startofday(ago(2d));
+let endDate   = now();
+
+// 1) Activity-level metrics (data size + compute) by pipeline run
+let ActivityMetrics =
+    ADFActivityRun
+    | where Start between (startDate .. endDate)
+    | where Status in ("Succeeded", "Failed", "Cancelled") 
+    //| where ActivityType == "Copy"        
+    | extend o = parse_json(Output)
+    // Defensive parsing – if fields are missing, they become 0
+    | extend
+        dataReadBytes       = tolong(o.dataRead),
+        dataWrittenBytes    = tolong(o.dataWritten),
+        ActivityDurationSec = datetime_diff("second", End, Start)
+    | extend
+        dataReadMB        = iif(isnull(dataReadBytes), 0.0, dataReadBytes / 1024.0 / 1024.0),
+        dataWrittenMB     = iif(isnull(dataWrittenBytes), 0.0, dataWrittenBytes / 1024.0 / 1024.0)
+    | summarize
+        totalDataReadMB      = sum(dataReadMB),
+        totalDataWrittenMB   = sum(dataWrittenMB),
+        totalActivitySeconds = sum(ActivityDurationSec)
+        by PipelineName, PipelineRunId;
+
+// 2) FINAL QUERY – must be the last statement
+ADFPipelineRun
+| where Start between (startDate .. endDate)
+| extend
+    ResouceGroupName = extract(@"\/resourcegroups\/([^\/]+)", 1, _ResourceId),
+    DataFactoryName = extract(@"\/factories\/([^\/]+)", 1, _ResourceId)
+| project
+    ResouceGroupName,
+    DataFactoryName,
+    PipelineName,
+    PipelineRunId = RunId,
+    PipelineStatus = Status
+| join kind=leftouter ActivityMetrics on PipelineName, PipelineRunId
+| summarize
+    totalRuns            = count(),
+    succeededRuns        = countif(PipelineStatus == "Succeeded"),
+    failedRuns           = countif(PipelineStatus == "Failed"),
+    totalDataReadMB      = sum(totalDataReadMB),
+    totalDataWrittenMB   = sum(totalDataWrittenMB),
+    totalDataReadGB      = sum(totalDataReadMB) / 1024.0,
+    totalDataWrittenGB   = sum(totalDataWrittenMB) / 1024.0,
+    totalActivitySeconds = sum(totalActivitySeconds)
+    by ResouceGroupName , DataFactoryName , PipelineName, PipelineRunId
+| extend totalComputeHours = totalActivitySeconds / 3600.0
+| extend ActivityCostUSD    = round((totalActivitySeconds / 3600.0) * 2.50, 2)  // 2.50 = your cost per hour
+| order by ActivityCostUSD desc
