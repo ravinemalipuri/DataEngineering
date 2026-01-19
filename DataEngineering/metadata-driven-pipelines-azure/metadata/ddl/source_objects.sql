@@ -18,8 +18,9 @@ GO
 CREATE TABLE [$(SchemaName)].source_objects (
     source_object_id        INT IDENTITY(1,1) PRIMARY KEY,
     source_system_id        INT NOT NULL REFERENCES [$(SchemaName)].source_systems(source_system_id),
+    source_schema_name      NVARCHAR(200) NOT NULL,
     source_object_name      NVARCHAR(200) NOT NULL,           -- schema.table or file path
-    target_layer            NVARCHAR(20) NOT NULL CHECK (target_layer IN ('BRONZE','SILVER','GOLD')),
+    target_layer            NVARCHAR(20) NOT NULL CHECK (target_layer IN ('SOURCE',BRONZE','SILVER','GOLD')),
     target_path             NVARCHAR(500) NOT NULL,
     load_type               NVARCHAR(20) NOT NULL CHECK (load_type IN ('FULL','INCREMENTAL','HYBRID')),
     hash_strategy           NVARCHAR(20) NOT NULL CHECK (hash_strategy IN ('NONE','ROW_HASH','KEY_HASH')),

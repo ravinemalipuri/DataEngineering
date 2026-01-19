@@ -26,14 +26,14 @@ INSERT INTO [$(SchemaName)].source_systems (
     updated_time
 ) VALUES
 (1, 'DB2_CORE', 'DB2', 'kv-secret-db2-core', 'DB2CORE', 1,
- 'Maria Gomez', 'maria.gomez@contoso.com',
- 'Ops OnCall', 'ops@dataplatform.com',
- '["ops@dataplatform.com","lead@dataplatform.com"]',
+  'Maria Gomez', 'maria.gomez@hy.com',
+  'Ops OnCall', 'ops@hy.com',
+  '["ops@hy.com","lead@hy.com"]',
  SYSUTCDATETIME(), SYSUTCDATETIME()),
 (2, 'SALESFORCE_CRM', 'SALESFORCE', 'kv-secret-sf-crm', NULL, 1,
- 'Liam Carter', 'liam.carter@contoso.com',
- 'CRM Squad', 'crm.support@dataplatform.com',
- '["crm.support@dataplatform.com"]',
+  'Liam Carter', 'liam.carter@hy.com',
+  'CRM Squad', 'crm.support@hy.com',
+  '["crm.support@hy.com"]',
  SYSUTCDATETIME(), SYSUTCDATETIME());
 
 SET IDENTITY_INSERT [$(SchemaName)].source_systems OFF;

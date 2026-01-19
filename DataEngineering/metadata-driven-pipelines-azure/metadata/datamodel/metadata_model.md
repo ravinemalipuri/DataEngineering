@@ -46,3 +46,8 @@ schema_compatibility_rules (1) ────< source_objects (via schema_compat_p
    - Add more helper tables (e.g., `dq_rule_catalog`, `run_audit`) as needed; the core relationships above remain consistent irrespective of database/schema supplied at deployment time.  
    - Sample seed data for each table lives under `metadata/dml/` to accelerate environment bootstrap.
 
+5. **Type normalization**  
+   - Before seeding `source_object_columns`, map source-system data types to their Spark/Delta equivalents using `src/framework/type_mapping.py`.  
+   - The helper covers AS400/DB2, SAP, and Salesforce out of the box (aliases such as `SFDC`, `SAP_HANA` are included) and can be extended for additional RDBMS or SaaS sources.  
+   - Example: `normalize_type("AS400_DB2", "DECIMAL(15,2)")` → `decimal(15,2)`, ensuring consistent comparisons inside `SchemaManager`.
+
