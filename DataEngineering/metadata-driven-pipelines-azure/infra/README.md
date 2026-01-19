@@ -1,0 +1,1 @@
+# Make this deployable for ADF or AWS basedon terrraform /bicep
