@@ -1,0 +1,79 @@
+fabric:
+  default_compute: FABRIC_LAKEHOUSE
+  compute_profiles:
+    FABRIC_LAKEHOUSE:
+      workspace_name: "hy-Fabric"
+      lakehouse_name: "hy_enterprise_lakehouse"
+      spark_endpoint: "https://api.fabric.microsoft.com/pools/lakehouse"
+    FABRIC_WAREHOUSE:
+      workspace_name: "hy-enterprise-onboarding"
+      warehouse_name: "hy_enterprise_warehouse"
+      sql_endpoint: "https://api.fabric.microsoft.com/pools/warehouse"
+    DATABRICKS:
+      workspace_url: "https://adb-0000000000000000.0.azuredatabricks.net"
+      cluster_policy: "metadata-driven"
+
+metadata_store:
+  jdbc:
+    url: "jdbc:sqlserver://sql-metadata.hy.com:1433;database=metadata_db;"
+    user: "metadata_rw"
+    password: "REPLACE_WITH_STRONG_PASSWORD"
+    driver: "com.microsoft.sqlserver.jdbc.SQLServerDriver"
+  tables:
+    source_objects_view: "[metadata_db].[dbo].[vw_source_objects]"
+    source_object_columns: "[metadata_db].[dbo].[source_object_columns]"
+    schema_history: "[metadata_db].[dbo].[schema_history]"
+    schema_change_log: "[metadata_db].[dbo].[schema_change_log]"
+    data_quality_results: "[metadata_db].[dbo].[data_quality_results]"
+    data_profiling_results: "[metadata_db].[dbo].[data_profiling_results]"
+    observability_metrics: "[metadata_db].[dbo].[observability_metrics]"
+
+sources:
+  DB2_CORE:
+    format: "jdbc"
+    options:
+    url: "jdbc:db2://db2-core.hy.com:50000/COREDB"
+      user: "db2_reader"
+      password: "REPLACE_DB2_PASSWORD"
+      fetchsize: "20000"
+      isolationLevel: "NONE"
+      driver: "com.ibm.db2.jcc.DB2Driver"
+      dbtable_template: "{object_name}"
+  SFDC:
+    format: "rest"
+    options:
+      endpoint: "https://api.salesforce.com/v1/"
+      object_template: "{object_name}"
+
+storage_paths:
+  root: "/hyonelake/lh_aftersales/home/files"
+  landing_template: "{root}/landing/{source_system}/{source_object}/ingest_dt={ingest_dt}/run_id={run_id}"
+  bronze_table_template: "{catalog}.{database}.{source_system}_{source_object}_bronze"
+  silver_table_template: "{catalog}.{database}.{source_system}_{source_object}_silver"
+  quarantine_template: "{root}/quarantine/{source_system}/{source_object}/run_id={run_id}"
+  checkpoint_template: "{root}/checkpoints/{source_system}/{source_object}"
+  landing_format: "parquet"
+  bronze_format: "delta"
+
+notifications:
+  enabled: true
+  smtp_host: "smtp.office365.com"
+  smtp_port: 587
+  use_tls: true
+  sender: "data-platform@hy.com"
+  success_recipients:
+    - "lakehouse-ops@hy.com"
+  failure_recipients:
+    - "lakehouse-oncall@hy.com"
+
+observability:
+  metrics_table: "[metadata_db].[dbo].[observability_metrics]"
+  emit_log_analytics: false
+
+
+
+
+
+
+
+

@@ -1,0 +1,115 @@
+fabric:
+  default_compute: FABRIC_LAKEHOUSE
+  compute_profiles:
+    FABRIC_LAKEHOUSE:
+      workspace_name: Contoso-Fabric
+      lakehouse_name: enterprise_lakehouse
+      spark_endpoint: https://api.fabric.microsoft.com/pools/lakehouse
+    FABRIC_WAREHOUSE:
+      workspace_name: Contoso-Fabric
+      warehouse_name: enterprise_warehouse
+      sql_endpoint: https://api.fabric.microsoft.com/pools/warehouse
+    DATABRICKS:
+      workspace_url: https://adb-0000000000000000.0.azuredatabricks.net
+      cluster_policy: metadata-driven
+  spark:
+    pool:
+      type_default: Custom
+      name_default: spk-prod-large
+      node_family: GeneralPurpose
+      node_size: Large
+      autoscale_enabled: true
+      min_nodes: 3
+      max_nodes: 12
+      dynamic_allocation: true
+    runtime:
+      version: Runtime 1.3
+    environment:
+      name: env-spark-prod-base
+      publish_required: true
+      library_policy: Pinned
+    lakehouse:
+      default_name: lh-prod-core
+    jobs:
+      session_timeout_minutes: 30
+      max_retries: 2
+      retry_backoff_seconds: 120
+      timeout_minutes: 240
+      log_level: INFO
+      stop_session_on_success: true
+      checkpoint_base_path: Files/system/checkpoints
+    hc:
+      notebooks_enabled: false
+      pipelines_enabled: true
+      inactivity_timeout_minutes: 30
+      max_notebooks_per_session: 5
+    concurrency:
+      job_limit: 15
+      pipeline_notebook_parallelism: 8
+    autoscale_billing:
+      enabled: false
+  security:
+    outbound_access_protection: true
+metadata_store:
+  jdbc:
+    url: jdbc:sqlserver://sql-metadata.hy.com:1433;database=metadata_db;
+    user: metadata_rw
+    password: REPLACE_WITH_STRONG_PASSWORD
+    driver: com.microsoft.sqlserver.jdbc.SQLServerDriver
+  tables:
+    source_objects_view: '[metadata_db].[dbo].[vw_source_objects]'
+    source_object_columns: '[metadata_db].[dbo].[source_object_columns]'
+    schema_history: '[metadata_db].[dbo].[schema_history]'
+    schema_change_log: '[metadata_db].[dbo].[schema_change_log]'
+    data_quality_results: '[metadata_db].[dbo].[data_quality_results]'
+    data_profiling_results: '[metadata_db].[dbo].[data_profiling_results]'
+    observability_metrics: '[metadata_db].[dbo].[observability_metrics]'
+sources:
+  DB2_CORE:
+    format: jdbc
+    options:
+      url: jdbc:db2://db2-core.hy.com:50000/COREDB
+      user: db2_reader
+      password: REPLACE_DB2_PASSWORD
+      fetchsize: '20000'
+      isolationLevel: NONE
+      driver: com.ibm.db2.jcc.DB2Driver
+      dbtable_template: '{object_name}'
+  SFDC:
+    format: rest
+    options:
+      endpoint: https://api.salesforce.com/v1/
+      object_template: '{object_name}'
+storage_paths:
+  root: /hyonelake/lh_aftersales/home/files
+  landing_template: '{root}/landing/{source_system}/{source_object}/ingest_dt={ingest_dt}/run_id={run_id}'
+  bronze_table_template: '{catalog}.{database}.{source_system}_{source_object}_bronze'
+  silver_table_template: '{catalog}.{database}.{source_system}_{source_object}_silver'
+  quarantine_template: '{root}/quarantine/{source_system}/{source_object}/run_id={run_id}'
+  checkpoint_template: '{root}/checkpoints/{source_system}/{source_object}'
+  landing_format: parquet
+  bronze_format: delta
+notifications:
+  enabled: true
+  smtp_host: smtp.office365.com
+  smtp_port: 587
+  use_tls: true
+  sender: data-platform@hy.com
+  success_recipients:
+  - lakehouse-ops@hy.com
+  failure_recipients:
+  - lakehouse-oncall@hy.com
+observability:
+  metrics_table: '[metadata_db].[dbo].[observability_metrics]'
+  emit_log_analytics: false
+spark:
+  sql:
+    adaptive:
+      enabled: true
+    shuffle:
+      partitions: 800
+    files:
+      maxPartitionBytes: 134217728
+  network:
+    timeout: 600
+  serializer: org.apache.spark.serializer.KryoSerializer
