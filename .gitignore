@@ -1,24 +1,35 @@
-# Logs
-logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
+# Client-specific code — local only
+Samplecode/
+hy_brnz_Incr_Load_Wrapper.py
 
-node_modules
-dist
-dist-ssr
-*.local
+# Real config files — use *.example versions
+pipeline_config.yaml
+pipeline_spark_config.yaml
+!pipeline_config.yaml.example
+!pipeline_spark_config.yaml.example
 
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
+# Secrets and environment
+.env
+*.env
+env.env
+secrets.yaml
+**/credentials.json
+
+# Python
+venv/
+.venv/
+__pycache__/
+*.pyc
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+
+# Archives and binaries
+*.zip
+
+# IDE and OS
+.vscode/
+.idea/
 .DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
+Thumbs.db

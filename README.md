@@ -1,105 +1,61 @@
+# Data Engineering Toolkit
 
-# Welcome to your Lovable project
+This repo is where I keep the patterns I keep reaching for on every data project.
 
-## Project info
+Most of it started from a recurring frustration: teams spending weeks building the same ingestion logic from scratch, every project, every time. New source system? Write a new notebook. Schema changed upstream? Find out three hours later when a report broke. Load strategy needs to change? Dig through code.
 
-**URL**: https://lovable.dev/projects/02f77215-350a-444d-b65d-580b5679d1a3
+The stuff in here is my answer to that. Config-driven pipelines, automated quality checks, schema profiling — built to be adapted for a new environment without starting from zero.
 
-## Live Preview
+---
 
-🌐 **Test the application**: [Live Demo](https://lovable.dev/projects/02f77215-350a-444d-b65d-580b5679d1a3)
+## What's in here
 
-📱 **Mobile Preview**: The application is fully responsive and works on all devices
+**[metadata-driven-pipelines-azure](./metadata-driven-pipelines-azure/)**
+The core of it. A pipeline framework where behavior — load type, keys, DQ rules, schema — lives in a metadata catalog, not in code. Onboarding a new source means adding rows to a table. The framework handles the rest.
 
-## Interactive Emotion Wheel Features
+Built for Microsoft Fabric and Databricks, though the design patterns apply anywhere.
 
-- **Multilingual Support**: Currently supports English and Telugu, with Spanish coming soon
-- **Three-level emotion hierarchy**: Primary, Secondary, and Detailed emotions
-- **Interactive exploration**: Click on emotion segments to explore related feelings
-- **Responsive design**: Works seamlessly on desktop, tablet, and mobile devices
-- **Fullscreen mode**: Enhanced viewing experience for better emotion exploration
+**[dataquality](./dataquality/)**
+A standalone DQ validation module built on Great Expectations. Works against files (CSV, Parquet, Excel) or live database tables across Snowflake, Databricks, PostgreSQL, Redshift, and BigQuery. Results are persisted — not just logged and forgotten — so you have an audit trail and can track quality trends over time.
 
-## How can I edit this code?
+**[dataprofiling](./dataprofiling/)**
+Automated profiling for when you're onboarding a new source and need to understand it fast. Reads the data, infers schema, scores data quality, detects primary key candidates, and outputs schema definitions in whatever format you need — JSON Schema, Avro, SQL DDL for Snowflake or PostgreSQL, Pydantic models.
 
-There are several ways of editing your application.
+---
 
-**Use Lovable**
+## How these fit together
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/02f77215-350a-444d-b65d-580b5679d1a3) and start prompting.
+The typical flow on a project looks like this:
 
-Changes made via Lovable will be committed automatically to this repo.
+1. Run the profiler against new source data to understand what you're working with
+2. Use the generated DDL and schema docs to set up the metadata catalog
+3. Let the pipeline framework take it from there — ingestion, quality checks, schema drift detection, all driven by metadata
 
-**Use your preferred IDE**
+None of these modules require the others. Each one is self-contained and can be dropped into an existing stack.
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+---
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+## Tech
 
-Follow these steps:
+Python, PySpark, Delta Lake, Microsoft Fabric, Databricks, Azure Data Lake Gen2, Great Expectations, SQLAlchemy, YAML config.
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+---
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+## Getting started
 
-# Step 3: Install the necessary dependencies.
-npm i
+```bash
+git clone https://github.com/ravinemalipuri/DataEngineering
+cd DataEngineering/metadata-driven-pipelines-azure
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+cp config/pipeline_config.yaml.example config/pipeline_config.yaml
+# Fill in your workspace, storage paths, and source connections
+
+pip install -r requirements.txt
+python src/jobs/hy_brnz_load_wrapper_fabric.py
 ```
 
-**Edit a file directly in GitHub**
+The metadata DDL to set up the catalog is in `metadata/ddl/`.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+---
 
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## Translation Collaboration
-
-The application supports multiple languages through translation files located in `src/translations/`. 
-
-### Adding New Languages
-
-1. Create a new translation file in `src/translations/` (e.g., `spanish.ts`, `tamil.ts`)
-2. Follow the existing translation structure
-3. Update the language selector in the navigation
-4. Contributors can edit individual translation files for collaborative translation work
-
-### Current Languages
-- English (en)
-- Telugu (te)
-- Spanish (es) - Coming soon
-- Tamil (ta) - Coming soon
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/02f77215-350a-444d-b65d-580b5679d1a3) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+[LinkedIn](https://linkedin.com/in/ravinemalipuri) · Open to Data Architect and Data Engineering Manager roles

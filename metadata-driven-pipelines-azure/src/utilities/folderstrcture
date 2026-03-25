@@ -1,0 +1,10 @@
+proj_root=/home/sarrnemp/azuredev-d3df/metadata-driven-pipelines-azure
+
+mkdir -p \
+  "$proj_root"/src/{framework,jobs,utilities} \
+  "$proj_root"/config/envs/{dev,test,prod} \
+  "$proj_root"/metadata/{ddl,dml,datamodel} \
+  "$proj_root"/docs \
+  "$proj_root"/infra \
+  "$proj_root"/tests/{unit,integration} \
+  "$proj_root"/scripts
